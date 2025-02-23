@@ -11,6 +11,7 @@ class DanceClass {
     required this.teacherSurname,
     required this.startTime,
     required this.endTime,
+    required this.imageUri,
     this.teacherImageRegistrationCard,
     this.price = 12,
   });
@@ -22,6 +23,7 @@ class DanceClass {
   final DateTime endTime;
   final File? teacherImageRegistrationCard;
   final int price;
+  final String imageUri;
 
   String get fullTeacherNameInline => '$teacherName $teacherSurname';
 

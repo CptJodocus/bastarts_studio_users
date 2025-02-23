@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
             backgroundColor: WidgetStatePropertyAll(Colors.white),
             foregroundColor: WidgetStatePropertyAll(Colors.black),
             textStyle: WidgetStatePropertyAll(TextStyle(fontSize: 24, fontFamily: 'BebasNeue')),
-            padding: WidgetStatePropertyAll(EdgeInsets.symmetric(vertical: 12, horizontal: 24)),
+            padding: WidgetStatePropertyAll(EdgeInsets.symmetric(vertical: 16, horizontal: 24)),
             shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(2))),
           ),
         ),

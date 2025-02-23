@@ -62,7 +62,7 @@ class _ClassCardContentsState extends State<ClassCardContents> {
             ),
           ),
 
-          child: Image(image: AssetImage('assets/arnika.png'), height: 300, fit: BoxFit.cover),
+          child: Image(image: AssetImage(widget.danceClass.imageUri), height: 300, fit: BoxFit.cover),
         ),
 
         Positioned(

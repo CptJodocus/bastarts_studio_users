@@ -17,12 +17,6 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   var _target = 1.0;
 
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _surnameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _birthDayController = TextEditingController();
-  final TextEditingController _birthYearController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Animate(target: _target).custom(
@@ -38,47 +32,44 @@ class _SignUpScreenState extends State<SignUpScreen> {
             }
           },
           child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: backgroundColor,
-              flexibleSpace: Container(
-                foregroundDecoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [backgroundColor!.withAlpha(0), backgroundColor.withAlpha(85), backgroundColor],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    stops: [0, 0.50, 1],
-                  ),
-                ),
-                child: Image(image: AssetImage('assets/arnika.png'), height: 300, fit: BoxFit.cover),
-              ),
-
-              toolbarHeight: 300,
-              leadingWidth: 72,
-              leading: Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: IconButton.filledTonal(
-                    onPressed: () => Navigator.pop(context),
-                    icon: Icon(Icons.arrow_back_rounded),
-                  ),
-                ),
-              ),
-            ),
             backgroundColor: backgroundColor,
-            body: Padding(
-              padding: const EdgeInsets.all(16),
-              child: ResponsiveTwoColumnLayout(
-                spacing: 64,
-                rowAlignment: MainAxisAlignment.center,
-                startContent: SignUpClassInfo(danceClass: widget.danceClass),
-                endContent: SignUpFields(
-                  nameController: _nameController,
-                  surnameController: _surnameController,
-                  emailController: _emailController,
-                  birthDayController: _birthDayController,
-                  birthYearController: _birthYearController,
-                ),
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Stack(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        foregroundDecoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [backgroundColor!.withAlpha(0), backgroundColor.withAlpha(85), backgroundColor],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            stops: [0, 0.50, 1],
+                          ),
+                        ),
+                        child: Image(image: AssetImage(widget.danceClass.imageUri), height: 300, fit: BoxFit.cover),
+                      ),
+                      Positioned(
+                        top: 16,
+                        left: 16,
+                        child: IconButton.filledTonal(
+                          onPressed: () => Navigator.of(context).pop(),
+                          icon: Icon(Icons.arrow_back_rounded),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: ResponsiveTwoColumnLayout(
+                      spacing: 64,
+                      rowAlignment: MainAxisAlignment.center,
+                      startContent: SignUpClassInfo(danceClass: widget.danceClass),
+                      endContent: SignUpFields(),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
