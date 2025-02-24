@@ -67,6 +67,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       rowAlignment: MainAxisAlignment.center,
                       startContent: SignUpClassInfo(danceClass: widget.danceClass),
                       endContent: SignUpFields(),
+                      wrapRowEndWithResponsiveCenter: true,
                     ),
                   ),
                 ],

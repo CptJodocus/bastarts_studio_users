@@ -1,3 +1,4 @@
+import 'package:bastarts_studio_users/presentation/widgets/responsive_center.dart';
 import 'package:flutter/material.dart';
 
 class ResponsiveTwoColumnLayout extends StatelessWidget {
@@ -8,6 +9,7 @@ class ResponsiveTwoColumnLayout extends StatelessWidget {
     required this.spacing,
     this.columnContent,
     this.rowAlignment,
+    this.wrapRowEndWithResponsiveCenter = false,
   });
 
   final Widget startContent;
@@ -16,8 +18,13 @@ class ResponsiveTwoColumnLayout extends StatelessWidget {
   final MainAxisAlignment? rowAlignment;
   final double spacing;
 
+  final bool wrapRowEndWithResponsiveCenter;
+
   @override
   Widget build(BuildContext context) {
+    final rowEndWidget =
+        wrapRowEndWithResponsiveCenter ? ResponsiveCenter(maxContentWidth: 400, child: endContent) : endContent;
+
     return LayoutBuilder(
       builder: (context, constraints) {
         if (constraints.maxWidth >= 600) {
@@ -26,7 +33,7 @@ class ResponsiveTwoColumnLayout extends StatelessWidget {
             mainAxisAlignment: rowAlignment ?? MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: spacing,
-            children: [Flexible(child: startContent), Flexible(child: endContent)],
+            children: [Flexible(child: startContent), Flexible(child: rowEndWidget)],
           );
         } else {
           if (columnContent != null) {

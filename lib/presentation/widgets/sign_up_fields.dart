@@ -256,7 +256,7 @@ class _SignUpFieldsState extends State<SignUpFields> {
                         Expanded(
                           child: MyFormField(
                             controller: _parentNameController,
-                            labelText: 'Ime zakonitega zastopnika',
+                            labelText: 'Ime',
                             keyboardType: TextInputType.name,
                             autoFillHints: [AutofillHints.givenName],
                             textInputAction: TextInputAction.next,
