@@ -48,7 +48,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             stops: [0, 0.50, 1],
                           ),
                         ),
-                        child: Image(image: AssetImage(widget.danceClass.imageUri), height: 300, fit: BoxFit.cover),
+                        child: Image(
+                          image: NetworkImage(
+                            widget.danceClass.imageDownloadUrl ?? 'https://i.ibb.co/MkyDCxrb/backup-banner.png',
+                          ),
+                          height: 300,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                       Positioned(
                         top: 16,

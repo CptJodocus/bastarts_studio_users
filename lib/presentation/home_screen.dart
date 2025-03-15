@@ -24,7 +24,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final danceClassListValue = ref.watch(danceClassListProvider);
+    final danceClassListValue = ref.watch(danceClassesStreamProvider);
     return Scaffold(
       backgroundColor: Colors.black,
       body: Padding(

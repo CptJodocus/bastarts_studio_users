@@ -85,216 +85,218 @@ class _SignUpFieldsState extends State<SignUpFields> {
   @override
   Widget build(BuildContext context) {
     //TODO this needs a bunch of validation to make sure you get actual values, and error messages where needed
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: spacing,
-      children: [
-        Row(
-          spacing: spacing,
-          children: [
-            Expanded(
-              child: MyFormField(
-                controller: _nameController,
-                labelText: 'Ime',
-                keyboardType: TextInputType.name,
-                autoFillHints: [AutofillHints.givenName],
-                textInputAction: TextInputAction.next,
-              ),
-            ),
-            Expanded(
-              child: MyFormField(
-                controller: _surnameController,
-                labelText: 'Priimek',
-                keyboardType: TextInputType.name,
-                autoFillHints: [AutofillHints.familyName],
-                textInputAction: TextInputAction.next,
-              ),
-            ),
-          ],
-        ),
-        MyFormField(
-          controller: _emailController,
-          labelText: 'E-pošta',
-          textInputAction: TextInputAction.next,
-          autoFillHints: [AutofillHints.email],
-          keyboardType: TextInputType.emailAddress,
-        ),
-        SizedBox(height: 8),
-        Text('Datum rojstva', style: TextTheme.of(context).bodySmall!.copyWith(fontSize: 18)),
-        Row(
-          spacing: spacing,
-          children: [
-            Flexible(
-              child: MyFormField(
-                controller: _birthDayController,
-                labelText: 'Dan',
-                textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.number,
-                autoFillHints: [AutofillHints.birthdayDay],
-                maxLength: 2,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                onChanged: (_) => checkIfUserIsOfAge(),
-              ),
-            ),
-            Expanded(
-              //TODO I wish I could've figured this out for better UX, but fuck it, this is how Google does it too
-              // child: DropdownMenu(
-              //   dropdownMenuEntries: List.generate(12, (index) {
-              //     return DropdownMenuEntry(
-              //       value: index + 1,
-              //       label: monthNames[index],
-              //       labelWidget: Text(
-              //         monthNames[index],
-              //         style: TextTheme.of(context).bodySmall!.copyWith(fontSize: 16),
-              //       ),
-              //     );
-              //   }),
-              //   label: Text('Mesec', maxLines: 1),
-              //   enableSearch: true,
-              //   width: 1000,
-              //   enableFilter: true,
-              //   menuStyle: MenuStyle(
-              //     backgroundColor: WidgetStatePropertyAll(Colors.white),
-              //     maximumSize: WidgetStatePropertyAll(Size(200, 800)),
-              //     minimumSize: WidgetStatePropertyAll(Size(0, 300)),
-              //   ),
-              //   inputDecorationTheme: InputDecorationTheme(
-              //     enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-              //     filled: true,
-              //     fillColor: Colors.white,
-              //     floatingLabelStyle: TextStyle(color: Colors.black),
-              //     floatingLabelBehavior: FloatingLabelBehavior.auto,
-              //     border: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-              //   ),
-              // ),
-              child: DropdownButtonFormField(
-                items: List.generate(12, (index) {
-                  return DropdownMenuItem(value: index + 1, child: Text(monthNames[index]));
-                }),
-                isExpanded: true,
-
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black54)),
-                  filled: true,
-                  fillColor: Colors.white,
-                  floatingLabelStyle: TextStyle(color: Colors.black54),
-                  floatingLabelBehavior: FloatingLabelBehavior.auto,
-                  labelText: 'Mesec',
-                  border: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-                ),
-                onChanged: (value) {
-                  if (value != null) birthMonth = value;
-                  checkIfUserIsOfAge();
-                },
-              ),
-            ),
-            Expanded(
-              child: Focus(
-                onFocusChange: (value) {
-                  checkIfUserIsOfAge();
-                },
+    return AutofillGroup(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: spacing,
+        children: [
+          Row(
+            spacing: spacing,
+            children: [
+              Expanded(
                 child: MyFormField(
-                  controller: _birthYearController,
-                  labelText: 'Leto',
-                  textInputAction: TextInputAction.done,
+                  controller: _nameController,
+                  labelText: 'Ime',
+                  keyboardType: TextInputType.name,
+                  autoFillHints: [AutofillHints.givenName],
+                  textInputAction: TextInputAction.next,
+                ),
+              ),
+              Expanded(
+                child: MyFormField(
+                  controller: _surnameController,
+                  labelText: 'Priimek',
+                  keyboardType: TextInputType.name,
+                  autoFillHints: [AutofillHints.familyName],
+                  textInputAction: TextInputAction.next,
+                ),
+              ),
+            ],
+          ),
+          MyFormField(
+            controller: _emailController,
+            labelText: 'E-pošta',
+            textInputAction: TextInputAction.next,
+            autoFillHints: [AutofillHints.email],
+            keyboardType: TextInputType.emailAddress,
+          ),
+          SizedBox(height: 8),
+          Text('Datum rojstva', style: TextTheme.of(context).bodySmall!.copyWith(fontSize: 18)),
+          Row(
+            spacing: spacing,
+            children: [
+              Flexible(
+                child: MyFormField(
+                  controller: _birthDayController,
+                  labelText: 'Dan',
+                  textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
-                  autoFillHints: [AutofillHints.birthdayYear],
-                  maxLength: 4,
+                  autoFillHints: [AutofillHints.birthdayDay],
+                  maxLength: 2,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  onEditingComplete: () {
+                  onChanged: (_) => checkIfUserIsOfAge(),
+                ),
+              ),
+              Expanded(
+                //TODO I wish I could've figured this out for better UX, but fuck it, this is how Google does it too
+                // child: DropdownMenu(
+                //   dropdownMenuEntries: List.generate(12, (index) {
+                //     return DropdownMenuEntry(
+                //       value: index + 1,
+                //       label: monthNames[index],
+                //       labelWidget: Text(
+                //         monthNames[index],
+                //         style: TextTheme.of(context).bodySmall!.copyWith(fontSize: 16),
+                //       ),
+                //     );
+                //   }),
+                //   label: Text('Mesec', maxLines: 1),
+                //   enableSearch: true,
+                //   width: 1000,
+                //   enableFilter: true,
+                //   menuStyle: MenuStyle(
+                //     backgroundColor: WidgetStatePropertyAll(Colors.white),
+                //     maximumSize: WidgetStatePropertyAll(Size(200, 800)),
+                //     minimumSize: WidgetStatePropertyAll(Size(0, 300)),
+                //   ),
+                //   inputDecorationTheme: InputDecorationTheme(
+                //     enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+                //     filled: true,
+                //     fillColor: Colors.white,
+                //     floatingLabelStyle: TextStyle(color: Colors.black),
+                //     floatingLabelBehavior: FloatingLabelBehavior.auto,
+                //     border: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+                //   ),
+                // ),
+                child: DropdownButtonFormField(
+                  items: List.generate(12, (index) {
+                    return DropdownMenuItem(value: index + 1, child: Text(monthNames[index]));
+                  }),
+                  isExpanded: true,
+
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black54)),
+                    filled: true,
+                    fillColor: Colors.white,
+                    floatingLabelStyle: TextStyle(color: Colors.black54),
+                    floatingLabelBehavior: FloatingLabelBehavior.auto,
+                    labelText: 'Mesec',
+                    border: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+                  ),
+                  onChanged: (value) {
+                    if (value != null) birthMonth = value;
                     checkIfUserIsOfAge();
                   },
                 ),
               ),
-            ),
-          ],
-        ),
-        CheckboxListTile(
-          value: mailingListSubscribe,
-          onChanged: (value) {
-            setState(() {
-              mailingListSubscribe = value;
-            });
-          },
-          controlAffinity: ListTileControlAffinity.leading,
-          contentPadding: EdgeInsets.zero,
-          title: Text(
-            'Želim si prejemati tedenska obvestila o novih klasih',
-            style: TextTheme.of(context).bodySmall!.copyWith(fontSize: 18),
-          ),
-        ),
-        ofAge
-            ? TermsAndConditionsCheckbox(value: termsAgree, onChanged: (value) => termsCheckboxOnTap(value))
-            : Card(
-              margin: EdgeInsets.zero,
-              color: Colors.white,
-              elevation: 8,
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: spacing,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'izjava zakonitega zastopnika',
-                          style: TextTheme.of(context).bodySmall!.copyWith(fontSize: 18),
-                        ),
-                        Text(
-                          '(Izpolni starš ali zakoniti zastopnik)',
-                          style: TextTheme.of(context).bodySmall!.copyWith(fontSize: 10, color: Colors.black54),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      spacing: spacing,
-                      children: [
-                        Expanded(
-                          child: MyFormField(
-                            controller: _parentNameController,
-                            labelText: 'Ime',
-                            keyboardType: TextInputType.name,
-                            autoFillHints: [AutofillHints.givenName],
-                            textInputAction: TextInputAction.next,
-                          ),
-                        ),
-                        Expanded(
-                          child: MyFormField(
-                            controller: _parentSurnameController,
-                            labelText: 'Priimek',
-                            keyboardType: TextInputType.name,
-                            autoFillHints: [AutofillHints.familyName],
-                            textInputAction: TextInputAction.next,
-                          ),
-                        ),
-                      ],
-                    ),
-                    MyFormField(
-                      controller: _parentEmailController,
-                      labelText: 'E-pošta',
-                      textInputAction: TextInputAction.next,
-                      autoFillHints: [AutofillHints.email],
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                    TermsAndConditionsCheckbox(value: termsAgree, onChanged: (value) => termsCheckboxOnTap(value)),
-                  ],
+              Expanded(
+                child: Focus(
+                  onFocusChange: (value) {
+                    checkIfUserIsOfAge();
+                  },
+                  child: MyFormField(
+                    controller: _birthYearController,
+                    labelText: 'Leto',
+                    textInputAction: TextInputAction.done,
+                    keyboardType: TextInputType.number,
+                    autoFillHints: [AutofillHints.birthdayYear],
+                    maxLength: 4,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    onEditingComplete: () {
+                      checkIfUserIsOfAge();
+                    },
+                  ),
                 ),
               ),
-            ).animate(target: ofAge == true ? 0 : 1).scaleY(alignment: Alignment.topCenter).fadeIn(),
-        SizedBox(height: 8),
-        ElevatedButton(
-          onPressed: () {},
-          style: ButtonStyle(
-            backgroundColor: WidgetStatePropertyAll(Colors.black),
-            foregroundColor: WidgetStatePropertyAll(Colors.white),
+            ],
           ),
-          child: Text('Prijavi se'),
-        ),
-      ],
+          CheckboxListTile(
+            value: mailingListSubscribe,
+            onChanged: (value) {
+              setState(() {
+                mailingListSubscribe = value;
+              });
+            },
+            controlAffinity: ListTileControlAffinity.leading,
+            contentPadding: EdgeInsets.zero,
+            title: Text(
+              'Želim si prejemati tedenska obvestila o novih klasih',
+              style: TextTheme.of(context).bodySmall!.copyWith(fontSize: 18),
+            ),
+          ),
+          ofAge
+              ? TermsAndConditionsCheckbox(value: termsAgree, onChanged: (value) => termsCheckboxOnTap(value))
+              : Card(
+                margin: EdgeInsets.zero,
+                color: Colors.white,
+                elevation: 8,
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: spacing,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'izjava zakonitega zastopnika',
+                            style: TextTheme.of(context).bodySmall!.copyWith(fontSize: 18),
+                          ),
+                          Text(
+                            '(Izpolni starš ali zakoniti zastopnik)',
+                            style: TextTheme.of(context).bodySmall!.copyWith(fontSize: 10, color: Colors.black54),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        spacing: spacing,
+                        children: [
+                          Expanded(
+                            child: MyFormField(
+                              controller: _parentNameController,
+                              labelText: 'Ime',
+                              keyboardType: TextInputType.name,
+                              autoFillHints: [AutofillHints.givenName],
+                              textInputAction: TextInputAction.next,
+                            ),
+                          ),
+                          Expanded(
+                            child: MyFormField(
+                              controller: _parentSurnameController,
+                              labelText: 'Priimek',
+                              keyboardType: TextInputType.name,
+                              autoFillHints: [AutofillHints.familyName],
+                              textInputAction: TextInputAction.next,
+                            ),
+                          ),
+                        ],
+                      ),
+                      MyFormField(
+                        controller: _parentEmailController,
+                        labelText: 'E-pošta',
+                        textInputAction: TextInputAction.next,
+                        autoFillHints: [AutofillHints.email],
+                        keyboardType: TextInputType.emailAddress,
+                      ),
+                      TermsAndConditionsCheckbox(value: termsAgree, onChanged: (value) => termsCheckboxOnTap(value)),
+                    ],
+                  ),
+                ),
+              ).animate(target: ofAge == true ? 0 : 1).scaleY(alignment: Alignment.topCenter).fadeIn(),
+          SizedBox(height: 8),
+          ElevatedButton(
+            onPressed: () {},
+            style: ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(Colors.black),
+              foregroundColor: WidgetStatePropertyAll(Colors.white),
+            ),
+            child: Text('Prijavi se'),
+          ),
+        ],
+      ),
     );
   }
 }

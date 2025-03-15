@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bastarts_studio_users/utils/date_time_format.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 typedef ClassID = String;
 
@@ -11,7 +12,7 @@ class DanceClass {
     required this.teacherSurname,
     required this.startTime,
     required this.endTime,
-    required this.imageUri,
+    this.imageDownloadUrl,
     this.teacherImageRegistrationCard,
     this.price = 12,
   });
@@ -23,7 +24,7 @@ class DanceClass {
   final DateTime endTime;
   final File? teacherImageRegistrationCard;
   final int price;
-  final String imageUri;
+  final String? imageDownloadUrl;
 
   String get fullTeacherNameInline => '$teacherName $teacherSurname';
 
@@ -42,4 +43,28 @@ class DanceClass {
   String get dateTime => '${kDateFormat.format(startTime)}, $classDuration';
   String get date => kDateNameFormat.format(startTime);
   String get time => kTimeFormat.format(startTime);
+
+  factory DanceClass.fromFirestore(Map<String, dynamic> map, String id) {
+    return DanceClass(
+      classId: id,
+      teacherName: map["teacherName"],
+      teacherSurname: map["teacherSurname"],
+      startTime: (map['startTime'] as Timestamp).toDate(),
+      endTime: (map['endTime'] as Timestamp).toDate(),
+      imageDownloadUrl: map["imageDownloadUrl"],
+      price: map["price"],
+    );
+  }
+
+  Map<String, dynamic> toFirestore() {
+    return {
+      //Wondering if this is going to break something in the future, because I removed the "id"
+      "teacherName": teacherName,
+      "teacherSurname": teacherSurname,
+      "startTime": Timestamp.fromDate(startTime),
+      "endTime": Timestamp.fromDate(endTime),
+      "imageDownloadUrl": imageDownloadUrl,
+      "price": price,
+    };
+  }
 }
