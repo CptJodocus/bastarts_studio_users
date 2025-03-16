@@ -5,6 +5,9 @@ class Student {
     required this.lastName,
     required this.email,
     this.present = false,
+    this.parentName,
+    this.parentSurname,
+    this.parentEmail,
   });
 
   final String uuid;
@@ -12,6 +15,10 @@ class Student {
   final String lastName;
   final String email;
   final bool present;
+
+  final String? parentName;
+  final String? parentSurname;
+  final String? parentEmail;
 
   String get fullName => '$firstName $lastName';
 
@@ -21,12 +28,24 @@ class Student {
       firstName: json["firstName"],
       lastName: json["lastName"],
       email: json["email"],
-      present: json["present"],
+      present: json["present"].toLowerCase() == 'true',
+      parentName: json["parentName"],
+      parentSurname: json["parenSurname"],
+      parentEmail: json["parentEmail"],
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {"uuid": uuid, "firstName": firstName, "lastName": lastName, "email": email, "present": present};
+    return {
+      "uuid": uuid,
+      "firstName": firstName,
+      "lastName": lastName,
+      "email": email,
+      "present": present,
+      "parentName": parentName,
+      "parentSurname": parentSurname,
+      "parentEmail": parentEmail,
+    };
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'package:bastarts_studio_users/constants/colors.dart';
 import 'package:bastarts_studio_users/presentation/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
             value: (dynamic _) => const ZoomPageTransitionsBuilder(),
           ),
         ),
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black, primary: Colors.black),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black, primary: Colors.black, error: MyColors.bastRed),
         fontFamily: 'BebasNeue',
         // primaryColor: Colors.white,
         textTheme: TextTheme(

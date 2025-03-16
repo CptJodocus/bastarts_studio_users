@@ -3,15 +3,25 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class TermsAndConditionsCheckbox extends StatelessWidget {
-  const TermsAndConditionsCheckbox({super.key, required this.value, required this.onChanged});
+  const TermsAndConditionsCheckbox({
+    super.key,
+    required this.value,
+    required this.onChanged,
+    this.isError = false,
+    this.subtitle,
+  });
 
   final bool? value;
   final Function(bool? value)? onChanged;
+  final bool isError;
+  final Widget? subtitle;
 
   @override
   Widget build(BuildContext context) {
     return CheckboxListTile(
       value: value,
+      isError: isError,
+      subtitle: subtitle,
       title: RichText(
         text: TextSpan(
           children: [

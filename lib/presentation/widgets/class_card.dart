@@ -16,7 +16,6 @@ class ClassCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //TODO get from network
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: ResponsiveCenter(

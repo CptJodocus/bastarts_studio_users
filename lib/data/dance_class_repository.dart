@@ -37,12 +37,41 @@ class DanceClassRepository {
     return ref.snapshots().map((event) => event.docs.map((e) => e.data()).toList().length);
   }
 
-  Future<void> addFakeRegistration(String danceClassId, String firstName, String lastName, String email) async {
+  Future<bool> alreadyRegistered(ClassID classId, String email) {
+    final uuid = emailToUuid(email);
+
+    final studentRef = _studentRef(classId, uuid);
+    return studentRef.get().then((value) => value.exists);
+  }
+
+  String emailToUuid(String email) {
     final bytes = utf8.encode(email);
     final uuid = sha1.convert(bytes);
-    final student = Student(uuid: uuid.toString(), firstName: firstName, lastName: lastName, email: email);
+    return uuid.toString();
+  }
 
-    await _studentsCollectionRef(danceClassId).add(student);
+  Future<void> register({
+    required String danceClassId,
+    required String firstName,
+    required String lastName,
+    required String email,
+    String? parentName,
+    String? parentSurname,
+    String? parentEmail,
+  }) async {
+    final studentId = emailToUuid(email);
+
+    final student = Student(
+      uuid: studentId,
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      parentName: parentName,
+      parentSurname: parentSurname,
+      parentEmail: parentEmail,
+    );
+
+    await _studentRef(danceClassId, studentId).set(student);
   }
 
   CollectionReference<DanceClass> _danceCollectionRef() => _firestore
