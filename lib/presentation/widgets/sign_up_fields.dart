@@ -1,4 +1,5 @@
 import 'package:bastarts_studio_users/presentation/sign_up_screen_controller.dart';
+import 'package:bastarts_studio_users/presentation/widgets/confirmation_screen.dart';
 import 'package:bastarts_studio_users/presentation/widgets/my_form_field.dart';
 import 'package:bastarts_studio_users/presentation/widgets/terms_and_conditions_checkbox.dart';
 import 'package:email_validator/email_validator.dart';
@@ -379,8 +380,7 @@ class _SignUpFieldsState extends ConsumerState<SignUpFields> {
                         parentEmail: _nullIfEmptyField(widget.parentEmailController.text),
                       );
                   if (success) {
-                    //TODO navigate to a confirmation screen instead
-                    navigator.pop();
+                    navigator.pushReplacement(MaterialPageRoute(builder: (context) => ConfirmationScreen()));
                   }
                 }
               },
