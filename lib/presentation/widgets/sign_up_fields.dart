@@ -1,3 +1,4 @@
+import 'package:bastarts_studio_users/domain/dance_class.dart';
 import 'package:bastarts_studio_users/presentation/sign_up_screen_controller.dart';
 import 'package:bastarts_studio_users/presentation/widgets/confirmation_screen.dart';
 import 'package:bastarts_studio_users/presentation/widgets/my_form_field.dart';
@@ -12,7 +13,7 @@ import 'package:intl/intl.dart';
 class SignUpFields extends ConsumerStatefulWidget {
   const SignUpFields({
     super.key,
-    required this.danceClassId,
+    required this.danceClass,
     required this.nameController,
     required this.surnameController,
     required this.emailController,
@@ -23,7 +24,7 @@ class SignUpFields extends ConsumerStatefulWidget {
     required this.parentEmailController,
   });
 
-  final String danceClassId;
+  final DanceClass danceClass;
   final TextEditingController nameController;
   final TextEditingController surnameController;
   final TextEditingController emailController;
@@ -371,7 +372,7 @@ class _SignUpFieldsState extends ConsumerState<SignUpFields> {
                   final success = await ref
                       .read(signUpScreenControllerProvider.notifier)
                       .register(
-                        danceClassId: widget.danceClassId,
+                        danceClass: widget.danceClass,
                         firstName: widget.nameController.text,
                         lastName: widget.surnameController.text,
                         email: widget.emailController.text,

@@ -39,6 +39,7 @@ class DanceClass {
   }
 
   String get columnDetails => '$fullTeacherNameInline\n$classDuration';
+  String get inlineDetails => '$fullTeacherNameInline, $classDuration';
 
   String get dateTime => '${kDateFormat.format(startTime)}, $classDuration';
   String get date => kDateNameFormat.format(startTime);

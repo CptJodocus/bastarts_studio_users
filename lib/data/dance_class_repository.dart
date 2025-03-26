@@ -74,6 +74,23 @@ class DanceClassRepository {
     await _studentRef(danceClassId, studentId).set(student);
   }
 
+  Future<void> sendRegistrationEmail(DanceClass danceClass, String firstName, String email) async {
+    final mailRef = _firestore.collection('mail');
+
+    await mailRef.add({
+      'to': email,
+      'template': {
+        'name': 'register',
+        'data': {
+          'name': firstName,
+          'teacherName': danceClass.fullTeacherNameInline,
+          'classDetails': danceClass.inlineDetails,
+          'price': danceClass.priceString,
+        },
+      },
+    });
+  }
+
   CollectionReference<DanceClass> _danceCollectionRef() => _firestore
       .collection('classes')
       .withConverter(

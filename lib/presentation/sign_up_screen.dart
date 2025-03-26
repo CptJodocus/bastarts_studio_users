@@ -119,7 +119,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                       rowAlignment: MainAxisAlignment.center,
                       startContent: SignUpClassInfo(danceClass: widget.danceClass),
                       endContent: SignUpFields(
-                        danceClassId: widget.danceClass.classId,
+                        danceClass: widget.danceClass,
                         nameController: _nameController,
                         surnameController: _surnameController,
                         emailController: _emailController,

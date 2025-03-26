@@ -1,4 +1,5 @@
 import 'package:bastarts_studio_users/data/dance_class_repository.dart';
+import 'package:bastarts_studio_users/domain/dance_class.dart';
 import 'package:bastarts_studio_users/utils/string_capitalization.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -10,7 +11,7 @@ class SignUpScreenController extends _$SignUpScreenController {
   FutureOr<void> build() {}
 
   Future<bool> register({
-    required String danceClassId,
+    required DanceClass danceClass,
     required String firstName,
     required String lastName,
     required String email,
@@ -26,17 +27,19 @@ class SignUpScreenController extends _$SignUpScreenController {
     final capitalizedSurname = lastName.capitalize();
 
     try {
-      final alreadySignedUp = await repository.alreadyRegistered(danceClassId, email);
+      final alreadySignedUp = await repository.alreadyRegistered(danceClass.classId, email);
       if (alreadySignedUp) {
         state = AsyncError('Uporabnik s tem e-poštnim naslovom je že prijavljen', StackTrace.current);
         return false;
       } else {
         await repository.register(
-          danceClassId: danceClassId,
+          danceClassId: danceClass.classId,
           firstName: capitalizedName,
           lastName: capitalizedSurname,
           email: email,
         );
+
+        await repository.sendRegistrationEmail(danceClass, capitalizedName, email);
         state = AsyncData(null);
         return true;
       }
