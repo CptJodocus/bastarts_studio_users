@@ -1,4 +1,5 @@
 import 'package:bastarts_studio_users/domain/dance_class.dart';
+import 'package:bastarts_studio_users/presentation/functions_repository.dart';
 import 'package:bastarts_studio_users/presentation/sign_up_screen_controller.dart';
 import 'package:bastarts_studio_users/presentation/widgets/confirmation_screen.dart';
 import 'package:bastarts_studio_users/presentation/widgets/my_form_field.dart';
@@ -380,6 +381,16 @@ class _SignUpFieldsState extends ConsumerState<SignUpFields> {
                         parentSurname: _nullIfEmptyField(widget.parentSurnameController.text),
                         parentEmail: _nullIfEmptyField(widget.parentEmailController.text),
                       );
+
+                  if (mailingListSubscribe == true) {
+                    ref
+                        .read(functionsRepositoryProvider)
+                        .signUpUserToEmailList(
+                          widget.emailController.text,
+                          widget.nameController.text,
+                          widget.surnameController.text,
+                        );
+                  }
                   if (success) {
                     navigator.pushReplacement(MaterialPageRoute(builder: (context) => ConfirmationScreen()));
                   }

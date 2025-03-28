@@ -7,6 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'firebase_options.dart';
 
+//TODO don't forget the CORS policy
+//TODO don't forget security rules
 void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(ProviderScope(child: const MyApp()));
