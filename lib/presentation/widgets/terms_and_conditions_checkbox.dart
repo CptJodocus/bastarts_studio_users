@@ -1,6 +1,7 @@
 import 'package:bastarts_studio_users/constants/colors.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TermsAndConditionsCheckbox extends StatelessWidget {
   const TermsAndConditionsCheckbox({
@@ -34,8 +35,12 @@ class TermsAndConditionsCheckbox extends StatelessWidget {
                 decoration: TextDecoration.underline,
                 decorationColor: MyColors.bastRed,
               ),
-              //TODO add url to T&Cs
-              recognizer: TapGestureRecognizer()..onTap = () {},
+              mouseCursor: SystemMouseCursors.click,
+              recognizer:
+                  TapGestureRecognizer()
+                    ..onTap = () async {
+                      await launchUrl(Uri.parse('https://bastarts.si/pogoji-dolocila-studio/'));
+                    },
             ),
           ],
         ),
