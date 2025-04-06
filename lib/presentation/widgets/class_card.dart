@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bastarts_studio_users/constants/colors.dart';
 import 'package:bastarts_studio_users/domain/dance_class.dart';
+import 'package:bastarts_studio_users/presentation/widgets/backup_network_image.dart';
 import 'package:bastarts_studio_users/presentation/widgets/responsive_center.dart';
 import 'package:bastarts_studio_users/presentation/widgets/responsive_two_column_layout.dart';
 import 'package:flutter/material.dart';
@@ -61,11 +62,7 @@ class _ClassCardContentsState extends State<ClassCardContents> {
             ),
           ),
 
-          child: Image(
-            image: NetworkImage(widget.danceClass.imageDownloadUrl ?? 'https://i.ibb.co/MkyDCxrb/backup-banner.png'),
-            height: 300,
-            fit: BoxFit.cover,
-          ),
+          child: BackupNetworkImage(imageUrl: widget.danceClass.imageDownloadUrl),
         ),
 
         Positioned(

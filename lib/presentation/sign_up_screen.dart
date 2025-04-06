@@ -1,5 +1,6 @@
 import 'package:bastarts_studio_users/domain/dance_class.dart';
 import 'package:bastarts_studio_users/presentation/sign_up_screen_controller.dart';
+import 'package:bastarts_studio_users/presentation/widgets/backup_network_image.dart';
 import 'package:bastarts_studio_users/presentation/widgets/responsive_two_column_layout.dart';
 import 'package:bastarts_studio_users/presentation/widgets/sign_up_class_info.dart';
 import 'package:bastarts_studio_users/presentation/widgets/sign_up_fields.dart';
@@ -94,13 +95,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                             stops: [0, 0.50, 1],
                           ),
                         ),
-                        child: Image(
-                          image: NetworkImage(
-                            widget.danceClass.imageDownloadUrl ?? 'https://i.ibb.co/MkyDCxrb/backup-banner.png',
-                          ),
-                          height: 300,
-                          fit: BoxFit.cover,
-                        ),
+                        child: BackupNetworkImage(imageUrl: widget.danceClass.imageDownloadUrl),
                       ),
                       Positioned(
                         top: 16,
