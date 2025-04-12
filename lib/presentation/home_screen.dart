@@ -38,6 +38,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         groupBy:
                             (element) =>
                                 DateTime(element.startTime.year, element.startTime.month, element.startTime.day),
+                        itemComparator: (element1, element2) => element1.startTime.compareTo(element2.startTime),
                         itemBuilder: (context, element) {
                           return CardOpener(danceClass: element);
                         },
