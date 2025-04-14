@@ -8,9 +8,13 @@ class BackupNetworkImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Image(
-      image: NetworkImage(imageUrl!),
+      image: NetworkImage(imageUrl ?? ''),
       errorBuilder:
-          (context, error, stackTrace) => Image.asset('assets/backup-banner.png', fit: BoxFit.cover, height: 300),
+          (context, error, stackTrace) => Image.asset(
+            'assets/backup-banner.png',
+            fit: BoxFit.cover,
+            height: 300,
+          ),
       height: 300,
       fit: BoxFit.cover,
     );
