@@ -39,7 +39,7 @@ class SignUpScreenController extends _$SignUpScreenController {
           email: email,
         );
 
-        await repository.sendRegistrationEmail(danceClass, capitalizedName, email);
+        await repository.sendRegistrationEmail(danceClass, capitalizedName, email, parentEmail);
         state = AsyncData(null);
         return true;
       }

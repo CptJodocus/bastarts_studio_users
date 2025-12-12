@@ -74,11 +74,12 @@ class DanceClassRepository {
     await _studentRef(danceClassId, studentId).set(student);
   }
 
-  Future<void> sendRegistrationEmail(DanceClass danceClass, String firstName, String email) async {
+  Future<void> sendRegistrationEmail(DanceClass danceClass, String firstName, String email, String? parentEmail) async {
     final mailRef = _firestore.collection('mail');
 
     await mailRef.add({
       'to': email,
+      'cc': parentEmail,
       'template': {
         'name': 'register',
         'data': {
