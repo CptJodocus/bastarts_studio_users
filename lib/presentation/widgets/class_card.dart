@@ -8,12 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 class ClassCard extends StatelessWidget {
-  const ClassCard({super.key, required this.danceClass}) : loading = false;
+  const ClassCard({super.key, required this.danceClass, this.trailing}) : loading = false;
 
-  const ClassCard.loading({super.key}) : loading = true, danceClass = null;
+  const ClassCard.loading({super.key, this.trailing}) : loading = true, danceClass = null;
 
   final DanceClass? danceClass;
   final bool loading;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class ClassCard extends StatelessWidget {
       child: ResponsiveCenter(
         child: ClipRRect(
           borderRadius: BorderRadius.circular(2),
-          child: loading ? ClassCardLoading() : ClassCardContents(danceClass: danceClass!),
+          child: loading ? ClassCardLoading() : ClassCardContents(danceClass: danceClass!, trailing: trailing),
         ),
       ),
     );
@@ -30,9 +31,10 @@ class ClassCard extends StatelessWidget {
 }
 
 class ClassCardContents extends StatefulWidget {
-  const ClassCardContents({super.key, required this.danceClass});
+  const ClassCardContents({super.key, required this.danceClass, this.trailing});
 
   final DanceClass danceClass;
+  final Widget? trailing;
 
   @override
   State<ClassCardContents> createState() => _ClassCardContentsState();
@@ -94,7 +96,7 @@ class _ClassCardContentsState extends State<ClassCardContents> {
                   spacing: 32,
                 ),
               ),
-              ElevatedButton(onPressed: null, child: Text('Prijava')),
+              widget.trailing ?? ElevatedButton(onPressed: null, child: Text('Prijava')),
             ],
           ),
         ),

@@ -27,9 +27,15 @@ class SignUpScreenController extends _$SignUpScreenController {
     final capitalizedSurname = lastName.capitalize();
 
     try {
-      final alreadySignedUp = await repository.alreadyRegistered(danceClass.classId, email);
+      final alreadySignedUp = await repository.alreadyRegistered(
+        danceClass.classId,
+        email,
+      );
       if (alreadySignedUp) {
-        state = AsyncError('Uporabnik s tem e-poštnim naslovom je že prijavljen', StackTrace.current);
+        state = AsyncError(
+          'Uporabnik s tem e-poštnim naslovom je že prijavljen',
+          StackTrace.current,
+        );
         return false;
       } else {
         await repository.register(
@@ -39,7 +45,18 @@ class SignUpScreenController extends _$SignUpScreenController {
           email: email,
         );
 
-        await repository.sendRegistrationEmail(danceClass, capitalizedName, email, parentEmail);
+        final packageExtraString =
+            danceClass.connectedClassId != null
+                ? '\nZa obisk obeh klasev v paketu je prispevek skupaj ${danceClass.packagePrice}€.\n\n'
+                : null;
+
+        await repository.sendRegistrationEmail(
+          danceClass,
+          capitalizedName,
+          email,
+          parentEmail,
+          packageExtraString,
+        );
         state = AsyncData(null);
         return true;
       }

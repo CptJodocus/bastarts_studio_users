@@ -7,5 +7,6 @@ class MyColors {
 
   static const shimmerForeground = grayDark;
 
+  static final green = Color(0xFF14ae5c);
   static const bastRed = Color(0xFFCC3E2F);
 }

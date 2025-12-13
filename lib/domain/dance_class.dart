@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:bastarts_studio_users/utils/date_time_format.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -13,8 +11,11 @@ class DanceClass {
     required this.startTime,
     required this.endTime,
     this.imageDownloadUrl,
-    this.teacherImageRegistrationCard,
     this.price = 12,
+    this.closed = false,
+    this.videosSent = false,
+    this.connectedClassId,
+    this.packagePrice,
   });
 
   final ClassID classId;
@@ -22,9 +23,14 @@ class DanceClass {
   final String teacherSurname;
   final DateTime startTime;
   final DateTime endTime;
-  final File? teacherImageRegistrationCard;
-  final int price;
   final String? imageDownloadUrl;
+  final int price;
+  final bool closed;
+  final bool videosSent;
+
+  //Maybe someday this will have to be a List<String?>, but not today.
+  final String? connectedClassId;
+  final int? packagePrice;
 
   String get fullTeacherNameInline => '$teacherName $teacherSurname';
 
@@ -54,6 +60,10 @@ class DanceClass {
       endTime: (map['endTime'] as Timestamp).toDate(),
       imageDownloadUrl: map["imageDownloadUrl"],
       price: map["price"],
+      closed: map["closed"],
+      videosSent: map['videosSent'],
+      connectedClassId: map['connectedClassId'],
+      packagePrice: map['packagePrice'],
     );
   }
 

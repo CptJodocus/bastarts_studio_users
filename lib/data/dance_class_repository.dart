@@ -4,7 +4,6 @@ import 'package:bastarts_studio_users/domain/dance_class.dart';
 import 'package:bastarts_studio_users/domain/student.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'dance_class_repository.g.dart';
@@ -74,12 +73,18 @@ class DanceClassRepository {
     await _studentRef(danceClassId, studentId).set(student);
   }
 
-  Future<void> sendRegistrationEmail(DanceClass danceClass, String firstName, String email, String? parentEmail) async {
+  Future<void> sendRegistrationEmail(
+    DanceClass danceClass,
+    String firstName,
+    String email,
+    String? parentEmail,
+    String? extra,
+  ) async {
     final mailRef = _firestore.collection('mail');
 
-    await mailRef.add({
+    Map<String, dynamic> emailMap = {
       'to': email,
-      'cc': parentEmail,
+
       'template': {
         'name': 'register',
         'data': {
@@ -87,9 +92,16 @@ class DanceClassRepository {
           'teacherName': danceClass.fullTeacherNameInline,
           'classDetails': danceClass.inlineDetails,
           'price': danceClass.priceString,
+          'extra': extra,
         },
       },
-    });
+    };
+
+    if (parentEmail != null) {
+      emailMap.addAll({'cc': parentEmail});
+    }
+
+    await mailRef.add(emailMap);
   }
 
   CollectionReference<DanceClass> _danceCollectionRef() => _firestore
