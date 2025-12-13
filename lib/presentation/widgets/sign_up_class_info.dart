@@ -1,4 +1,5 @@
 import 'package:bastarts_studio_users/domain/dance_class.dart';
+import 'package:bastarts_studio_users/presentation/widgets/extra_registrations_field.dart';
 import 'package:flutter/material.dart';
 
 class SignUpClassInfo extends StatelessWidget {
@@ -16,6 +17,8 @@ class SignUpClassInfo extends StatelessWidget {
         Text(danceClass.date, style: TextTheme.of(context).bodySmall),
         Text(danceClass.classDuration, style: TextTheme.of(context).bodySmall),
         Text(danceClass.priceString, style: TextTheme.of(context).bodySmall),
+        SizedBox(height: 32),
+        ExtraRegistrationsField(danceClass),
       ],
     );
   }

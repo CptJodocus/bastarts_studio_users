@@ -22,38 +22,53 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     super.initState();
   }
 
+  final bool maintenance = false;
+
   @override
   Widget build(BuildContext context) {
     final danceClassListValue = ref.watch(danceClassesStreamProvider);
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: danceClassListValue.when(
-          data:
-              (data) =>
-                  data.isNotEmpty
-                      ? GroupedListView(
-                        elements: data,
-                        groupBy:
-                            (element) =>
-                                DateTime(element.startTime.year, element.startTime.month, element.startTime.day),
-                        itemComparator: (element1, element2) => element1.startTime.compareTo(element2.startTime),
-                        itemBuilder: (context, element) {
-                          return CardOpener(danceClass: element);
-                        },
-                        groupSeparatorBuilder: (value) => ClassListSeparator(date: kDateNameFormat.format(value)),
-                      )
-                      : Center(child: Text('Trenutno ni napovedanih nobenih klasov')),
-          error: (err, stack) => Center(child: Text('Prišlo je do napake\n${err.toString()}')),
-          loading: () {
-            final List<Widget> loadingUI = List.generate(3, (index) => ClassCard.loading())
-              ..insert(0, ClassListSeparator());
+      body:
+          maintenance
+              ? Center(child: Text('Trenutno ni napovedanih nobenih klasov'))
+              : Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: danceClassListValue.when(
+                  data:
+                      (data) =>
+                          data.isNotEmpty
+                              ? GroupedListView(
+                                elements: data,
+                                groupBy:
+                                    (element) => DateTime(
+                                      element.startTime.year,
+                                      element.startTime.month,
+                                      element.startTime.day,
+                                    ),
+                                itemComparator:
+                                    (element1, element2) => element1.startTime.compareTo(element2.startTime),
+                                itemBuilder: (context, element) {
+                                  return CardOpener(danceClass: element);
+                                },
+                                groupSeparatorBuilder:
+                                    (value) => ClassListSeparator(date: kDateNameFormat.format(value)),
+                              )
+                              : Center(
+                                child: Text(
+                                  'Trenutno ni napovedanih nobenih klasov',
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                  error: (err, stack) => Center(child: Text('Prišlo je do napake\n${err.toString()}')),
+                  loading: () {
+                    final List<Widget> loadingUI = List.generate(3, (index) => ClassCard.loading())
+                      ..insert(0, ClassListSeparator());
 
-            return SingleChildScrollView(child: Column(children: loadingUI));
-          },
-        ),
-      ),
+                    return SingleChildScrollView(child: Column(children: loadingUI));
+                  },
+                ),
+              ),
     );
   }
 }

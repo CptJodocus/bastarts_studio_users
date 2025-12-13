@@ -1,3 +1,4 @@
+import 'package:bastarts_studio_users/data/extra_class_provider.dart';
 import 'package:bastarts_studio_users/domain/dance_class.dart';
 import 'package:bastarts_studio_users/presentation/functions_repository.dart';
 import 'package:bastarts_studio_users/presentation/sign_up_screen_controller.dart';
@@ -381,6 +382,22 @@ class _SignUpFieldsState extends ConsumerState<SignUpFields> {
                         parentSurname: _nullIfEmptyField(widget.parentSurnameController.text),
                         parentEmail: _nullIfEmptyField(widget.parentEmailController.text),
                       );
+
+                  final extraClasses = ref.watch(extraClassProvider);
+
+                  for (var danceClass in extraClasses) {
+                    await ref
+                        .read(signUpScreenControllerProvider.notifier)
+                        .register(
+                          danceClass: danceClass,
+                          firstName: widget.nameController.text,
+                          lastName: widget.surnameController.text,
+                          email: widget.emailController.text,
+                          parentName: _nullIfEmptyField(widget.parentNameController.text),
+                          parentSurname: _nullIfEmptyField(widget.parentSurnameController.text),
+                          parentEmail: _nullIfEmptyField(widget.parentEmailController.text),
+                        );
+                  }
 
                   if (mailingListSubscribe == true) {
                     ref
