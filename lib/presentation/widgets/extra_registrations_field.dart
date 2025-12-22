@@ -65,7 +65,7 @@ class _ExtraRegistrationsFieldState extends ConsumerState<ExtraRegistrationsFiel
                     onPressed: null,
                     style: ButtonStyle(
                       backgroundColor: WidgetStatePropertyAll(connectedClassSelected ? MyColors.green : Colors.white),
-                      fixedSize: WidgetStatePropertyAll(Size(160, 44)),
+                      minimumSize: WidgetStatePropertyAll(Size(172, 56)),
                     ),
                     child:
                         connectedClassSelected
