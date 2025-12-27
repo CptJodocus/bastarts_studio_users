@@ -11,14 +11,18 @@ enum AppRoute { home, pricing }
 @riverpod
 GoRouter goRouter(Ref ref) {
   return GoRouter(
-    initialLocation: '/cenik',
+    initialLocation: '/',
     routes: [
       GoRoute(
         path: '/',
         name: AppRoute.home.name,
         builder: (context, state) => HomeScreen(),
         routes: [
-          GoRoute(path: 'cenik', name: AppRoute.pricing.name, builder: (context, state) => PricingScreen()),
+          GoRoute(
+            path: 'cenik',
+            name: AppRoute.pricing.name,
+            builder: (context, state) => PricingScreen(),
+          ),
           GoRoute(
             path: 'podrobnosti/:id',
             builder: (context, state) {
