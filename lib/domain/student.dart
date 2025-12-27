@@ -28,7 +28,7 @@ class Student {
       firstName: json["firstName"],
       lastName: json["lastName"],
       email: json["email"],
-      present: json["present"].toLowerCase() == 'true',
+      present: json["present"],
       parentName: json["parentName"],
       parentSurname: json["parenSurname"],
       parentEmail: json["parentEmail"],

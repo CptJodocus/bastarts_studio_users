@@ -1,28 +1,31 @@
 import 'package:bastarts_studio_users/constants/colors.dart';
-import 'package:bastarts_studio_users/presentation/home_screen.dart';
+import 'package:bastarts_studio_users/routing/go_router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 
 import 'firebase_options.dart';
 
 //TODO don't forget the CORS policy
 //TODO don't forget security rules
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  usePathUrlStrategy();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(ProviderScope(child: const MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(BuildContext context, WidgetRef ref) {
+    return MaterialApp.router(
+      routerConfig: ref.watch(goRouterProvider),
       title: 'BastArts Studio',
-
       theme: ThemeData(
         pageTransitionsTheme: PageTransitionsTheme(
           builders: Map<TargetPlatform, PageTransitionsBuilder>.fromIterable(
@@ -37,7 +40,7 @@ class MyApp extends StatelessWidget {
           labelMedium: TextStyle(color: Colors.white, fontSize: 48),
           labelLarge: TextStyle(color: Colors.black, fontSize: 48, height: 1),
           headlineMedium: TextStyle(color: Colors.white, fontSize: 24),
-          bodyMedium: TextStyle(color: Colors.white, fontSize: 24),
+          bodyMedium: TextStyle(color: Colors.black, fontSize: 24),
           bodySmall: TextStyle(color: Colors.black, fontSize: 24, height: 1),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
@@ -58,7 +61,6 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      home: const HomeScreen(),
     );
   }
 }
