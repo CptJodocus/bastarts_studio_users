@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bastarts_studio_users/presentation/widgets/responsive_center.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -21,6 +22,8 @@ class _PricingScreenState extends State<PricingScreen> {
   int tecajniki = 10;
   bool snemanje = true;
   Set<ViewMode> _selectedViewMode = {ViewMode.table};
+
+  final AutoSizeGroup autoSizeGroup = AutoSizeGroup();
 
   void updateSelectedDvorana(Set<Dvorana> newSelection) {
     setState(() {
@@ -494,21 +497,29 @@ class _PricingScreenState extends State<PricingScreen> {
                                         ),
                                       ),
                                       Row(
+                                        spacing: 8,
                                         children: [
                                           Expanded(
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                Text('Dvorana: ${calculateStudioDvoranaPrice(tecajniki)}€'),
+                                                AutoSizeText(
+                                                  'Dvorana: ${calculateStudioDvoranaPrice(tecajniki)}€',
+                                                  maxLines: 1,
+                                                ),
                                                 snemanje
-                                                    ? Text('Snemanje: ${calculateStudioFootage(tecajniki)}€')
+                                                    ? AutoSizeText(
+                                                      'Snemanje: ${calculateStudioFootage(tecajniki)}€',
+                                                      maxLines: 1,
+                                                    )
                                                     : SizedBox.shrink(),
-                                                Text('Administracija: $tecajniki€'),
+                                                AutoSizeText('Administracija: $tecajniki€', maxLines: 1),
                                                 SizedBox(
                                                   height: 32,
                                                 ),
-                                                Text(
+                                                AutoSizeText(
                                                   'Končni dobiček: ${tecajniki * classPrice - calculateTotalCost(true)}€',
+                                                  maxLines: 1,
                                                 ),
                                               ],
                                             ),
@@ -517,14 +528,17 @@ class _PricingScreenState extends State<PricingScreen> {
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                Text('Dvorana: ${calculateOwnStudioPrice()}€'),
-                                                snemanje ? Text('Snemanje: 50€') : SizedBox.shrink(),
-                                                Text('Administracija: /'),
+                                                AutoSizeText('Dvorana: ${calculateOwnStudioPrice()}€', maxLines: 1),
+                                                snemanje
+                                                    ? AutoSizeText('Snemanje: 50€', maxLines: 1)
+                                                    : SizedBox.shrink(),
+                                                AutoSizeText('Administracija: /', maxLines: 1),
                                                 SizedBox(
                                                   height: 32,
                                                 ),
-                                                Text(
+                                                AutoSizeText(
                                                   'Končni dobiček: ${tecajniki * classPrice - calculateTotalCost(false)}€',
+                                                  maxLines: 1,
                                                 ),
                                               ],
                                             ),
