@@ -156,82 +156,119 @@ class _PricingScreenState extends State<PricingScreen> {
                 ),
               ),
               SliverToBoxAdapter(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 12,
+                child: Column(
+                  spacing: 16,
                   children: [
-                    Text('Cena klasa:'),
-                    DropdownButton(
-                      value: classPrice,
-                      style: TextTheme.of(context).bodyMedium,
-                      items: List.generate(
-                        11,
-                        (index) => DropdownMenuItem(
-                          value: 10 + index,
-                          child: Text('${10 + index} €'),
-                        ),
-                      ),
-                      onChanged: (value) => updateClassPrice(value),
-                    ),
-                  ],
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Snemanje'),
-                    Checkbox(
-                      value: snemanje,
-                      onChanged:
-                          (value) => setState(() {
-                            snemanje = !snemanje;
-                          }),
-                    ),
-                  ],
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: SegmentedButton(
-                  segments: [
-                    ButtonSegment<ViewMode>(
-                      value: ViewMode.example,
-                      label: Text('Prikaži primer'),
-                    ),
-                    ButtonSegment<ViewMode>(
-                      value: ViewMode.table,
-                      label: Text('Prikaži tabele'),
-                    ),
-                  ],
-                  selected: _selectedViewMode,
-                  showSelectedIcon: true,
-                  onSelectionChanged: (selection) => updateSelectedViewMode(selection),
-                  style: mySegmentedButtonStyle,
-                ),
-              ),
-              _selectedViewMode.first == ViewMode.example
-                  ? SliverToBoxAdapter(
-                    child: Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       spacing: 12,
                       children: [
-                        Text('Število tečajnikov:'),
+                        Text('Cena klasa:'),
                         DropdownButton(
-                          value: tecajniki,
+                          value: classPrice,
                           style: TextTheme.of(context).bodyMedium,
                           items: List.generate(
-                            40,
+                            11,
                             (index) => DropdownMenuItem(
-                              value: 1 + index,
-                              child: Text('${index + 1}'),
+                              value: 10 + index,
+                              child: Text('${10 + index} €'),
                             ),
                           ),
-                          onChanged: (value) => updateTecajniki(value),
+                          onChanged: (value) => updateClassPrice(value),
                         ),
                       ],
                     ),
-                  )
-                  : SliverToBoxAdapter(),
+                    Row(
+                      spacing: 12,
+                      children: [
+                        Text('Dvorana:'),
+                        SegmentedButton(
+                          segments: [
+                            ButtonSegment<Dvorana>(
+                              value: Dvorana.large,
+                              label: Text('Velika'),
+                            ),
+                            ButtonSegment<Dvorana>(
+                              value: Dvorana.small,
+                              label: Text('Mala'),
+                            ),
+                          ],
+                          selected: _selectedDvorana,
+                          showSelectedIcon: true,
+                          onSelectionChanged: (selection) => updateSelectedDvorana(selection),
+                          style: mySegmentedButtonStyle,
+                        ),
+                      ],
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      spacing: 12,
+                      children: [
+                        Text('Snemanje:'),
+                        SegmentedButton<bool>(
+                          segments: [
+                            ButtonSegment<bool>(
+                              value: true,
+                              label: Text('Da'),
+                            ),
+                            ButtonSegment<bool>(
+                              value: false,
+                              label: Text('Ne'),
+                            ),
+                          ],
+                          selected: {snemanje},
+                          showSelectedIcon: true,
+                          onSelectionChanged: (selection) {
+                            setState(() {
+                              snemanje = selection.first;
+                            });
+                          },
+                          style: mySegmentedButtonStyle,
+                        ),
+                      ],
+                    ),
+
+                    SegmentedButton(
+                      segments: [
+                        ButtonSegment<ViewMode>(
+                          value: ViewMode.example,
+                          label: Text('Prikaži primer'),
+                        ),
+                        ButtonSegment<ViewMode>(
+                          value: ViewMode.table,
+                          label: Text('Prikaži tabele'),
+                        ),
+                      ],
+                      selected: _selectedViewMode,
+                      showSelectedIcon: true,
+                      onSelectionChanged: (selection) => updateSelectedViewMode(selection),
+                      style: mySegmentedButtonStyle,
+                    ),
+                    _selectedViewMode.first == ViewMode.example
+                        ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          spacing: 12,
+                          children: [
+                            Text('Število tečajnikov:'),
+                            DropdownButton(
+                              value: tecajniki,
+                              style: TextTheme.of(context).bodyMedium,
+                              items: List.generate(
+                                40,
+                                (index) => DropdownMenuItem(
+                                  value: 1 + index,
+                                  child: Text('${index + 1}'),
+                                ),
+                              ),
+                              onChanged: (value) => updateTecajniki(value),
+                            ),
+                          ],
+                        )
+                        : SizedBox.shrink(),
+                  ],
+                ),
+              ),
               SliverPadding(
                 padding: EdgeInsets.only(top: 120),
                 sliver: SliverStickyHeader(
@@ -269,22 +306,7 @@ class _PricingScreenState extends State<PricingScreen> {
                           ],
                         ),
                         Divider(color: Colors.black38),
-                        SegmentedButton(
-                          segments: [
-                            ButtonSegment<Dvorana>(
-                              value: Dvorana.large,
-                              label: Text('Velika'),
-                            ),
-                            ButtonSegment<Dvorana>(
-                              value: Dvorana.small,
-                              label: Text('Mala'),
-                            ),
-                          ],
-                          selected: _selectedDvorana,
-                          showSelectedIcon: true,
-                          onSelectionChanged: (selection) => updateSelectedDvorana(selection),
-                          style: mySegmentedButtonStyle,
-                        ),
+
                         SizedBox(
                           height: 32,
                         ),
@@ -319,7 +341,13 @@ class _PricingScreenState extends State<PricingScreen> {
                                 }
 
                                 if (index == 0) {
-                                  return Text('Število tečajnikov');
+                                  return Padding(
+                                    padding: const EdgeInsets.only(top: 8.0),
+                                    child: Text(
+                                      'Št.\ntečajnikov',
+                                      style: TextStyle(height: 1),
+                                    ),
+                                  );
                                 }
                                 return ComparisonRow(
                                   index: index,
@@ -424,14 +452,20 @@ class _PricingScreenState extends State<PricingScreen> {
                                 delegate: SliverChildBuilderDelegate(
                                   childCount: 27,
                                   (context, index) {
-                                    if (index == 25) {
+                                    if (index == 26) {
                                       return Center(
                                         child: Text('...'),
                                       );
                                     }
 
                                     if (index == 0) {
-                                      return Text('Število tečajnikov');
+                                      return Padding(
+                                        padding: const EdgeInsets.only(top: 8.0),
+                                        child: Text(
+                                          'Št.\ntečajnikov',
+                                          style: TextStyle(height: 1),
+                                        ),
+                                      );
                                     }
 
                                     return ComparisonRow(
