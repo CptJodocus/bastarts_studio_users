@@ -18,10 +18,10 @@ class PricingScreen extends StatefulWidget {
 
 class _PricingScreenState extends State<PricingScreen> {
   Set<Dvorana> _selectedDvorana = {Dvorana.large};
-  int classPrice = 12;
+  int classPrice = 15;
   int tecajniki = 10;
   bool snemanje = true;
-  Set<ViewMode> _selectedViewMode = {ViewMode.table};
+  Set<ViewMode> _selectedViewMode = {ViewMode.example};
 
   final AutoSizeGroup autoSizeGroup = AutoSizeGroup();
 
@@ -70,16 +70,9 @@ class _PricingScreenState extends State<PricingScreen> {
       result = 0; // Default case if price is below 8
     }
 
-    if (students * classPrice -
-            students -
-            calculateStudioFootage(students) -
-            50 <
-        result) {
+    if (students * classPrice - students - calculateStudioFootage(students) - 50 < result) {
       return max(
-        students * classPrice -
-            students -
-            calculateStudioFootage(students) -
-            50,
+        students * classPrice - students - calculateStudioFootage(students) - 50,
         0,
       );
     } else {
@@ -111,8 +104,7 @@ class _PricingScreenState extends State<PricingScreen> {
     double result = 0;
 
     if (studio) {
-      result =
-          calculateStudioDvoranaPrice(tecajniki) + tecajniki.roundToDouble();
+      result = calculateStudioDvoranaPrice(tecajniki) + tecajniki.roundToDouble();
       if (snemanje) result = result + calculateStudioFootage(tecajniki);
     } else {
       result = calculateOwnStudioPrice();
@@ -125,14 +117,10 @@ class _PricingScreenState extends State<PricingScreen> {
   Widget build(BuildContext context) {
     final ButtonStyle mySegmentedButtonStyle = ButtonStyle(
       foregroundColor: WidgetStateColor.resolveWith(
-        (states) =>
-            states.contains(WidgetState.selected) ? Colors.white : Colors.black,
+        (states) => states.contains(WidgetState.selected) ? Colors.white : Colors.black,
       ),
       backgroundColor: WidgetStateColor.resolveWith(
-        (states) =>
-            states.contains(WidgetState.selected)
-                ? Colors.black
-                : Colors.transparent,
+        (states) => states.contains(WidgetState.selected) ? Colors.black : Colors.transparent,
       ),
       side: const WidgetStatePropertyAll(BorderSide(color: Colors.black)),
       textStyle: WidgetStatePropertyAll(
@@ -207,18 +195,17 @@ class _PricingScreenState extends State<PricingScreen> {
                 child: SegmentedButton(
                   segments: [
                     ButtonSegment<ViewMode>(
-                      value: ViewMode.table,
-                      label: Text('Prikaži tabele'),
-                    ),
-                    ButtonSegment<ViewMode>(
                       value: ViewMode.example,
                       label: Text('Prikaži primer'),
+                    ),
+                    ButtonSegment<ViewMode>(
+                      value: ViewMode.table,
+                      label: Text('Prikaži tabele'),
                     ),
                   ],
                   selected: _selectedViewMode,
                   showSelectedIcon: true,
-                  onSelectionChanged:
-                      (selection) => updateSelectedViewMode(selection),
+                  onSelectionChanged: (selection) => updateSelectedViewMode(selection),
                   style: mySegmentedButtonStyle,
                 ),
               ),
@@ -295,8 +282,7 @@ class _PricingScreenState extends State<PricingScreen> {
                           ],
                           selected: _selectedDvorana,
                           showSelectedIcon: true,
-                          onSelectionChanged:
-                              (selection) => updateSelectedDvorana(selection),
+                          onSelectionChanged: (selection) => updateSelectedDvorana(selection),
                           style: mySegmentedButtonStyle,
                         ),
                         SizedBox(
@@ -324,14 +310,17 @@ class _PricingScreenState extends State<PricingScreen> {
                       _selectedViewMode.first == ViewMode.table
                           ? SliverList(
                             delegate: SliverChildBuilderDelegate(
-                              childCount: 16,
+                              childCount: 17,
                               (context, index) {
-                                if (index == 15) {
+                                if (index == 16) {
                                   return Center(
                                     child: Text('...'),
                                   );
                                 }
 
+                                if (index == 0) {
+                                  return Text('Število tečajnikov');
+                                }
                                 return ComparisonRow(
                                   index: index,
                                   studio: calculateStudioDvoranaPrice(
@@ -433,12 +422,16 @@ class _PricingScreenState extends State<PricingScreen> {
                           _selectedViewMode.first == ViewMode.table
                               ? SliverList(
                                 delegate: SliverChildBuilderDelegate(
-                                  childCount: 26,
+                                  childCount: 27,
                                   (context, index) {
                                     if (index == 25) {
                                       return Center(
                                         child: Text('...'),
                                       );
+                                    }
+
+                                    if (index == 0) {
+                                      return Text('Število tečajnikov');
                                     }
 
                                     return ComparisonRow(
@@ -608,8 +601,7 @@ class _PricingScreenState extends State<PricingScreen> {
                                   children: [
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           AutoSizeText(
                                             'Dvorana: ${calculateStudioDvoranaPrice(tecajniki)}€',
@@ -637,8 +629,7 @@ class _PricingScreenState extends State<PricingScreen> {
                                     ),
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           AutoSizeText(
                                             'Dvorana: ${calculateOwnStudioPrice()}€',
@@ -702,7 +693,7 @@ class ComparisonRow extends StatelessWidget {
             SizedBox(
               width: 36,
               child: Text(
-                '${index + 1}',
+                '${index}',
                 style: TextStyle(color: Colors.black38),
               ),
             ),
