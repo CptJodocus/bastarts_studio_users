@@ -47,8 +47,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       element.startTime.day,
                                     ),
                                 itemComparator:
-                                    (element1, element2) => element1.startTime
-                                        .compareTo(element2.startTime),
+                                    (element1, element2) => element1.startTime.compareTo(element2.startTime),
                                 itemBuilder: (context, element) {
                                   return CardOpener(danceClass: element);
                                 },
@@ -60,6 +59,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               : Center(
                                 child: Text(
                                   'Trenutno ni napovedanih nobenih klasov',
+                                  style: TextStyle(color: Colors.white),
                                 ),
                               ),
                   error:

@@ -59,13 +59,13 @@ class _PricingScreenState extends State<PricingScreen> {
     int result = 0;
 
     if (classPrice == 8 || classPrice == 9) {
-      result = min(studio - (studio % 2), students * 2);
+      result = min(studio, students * 2);
     } else if (classPrice >= 10 && classPrice <= 12) {
-      result = min(studio - (studio % 3), students * 3);
+      result = min(studio, students * 3);
     } else if (classPrice >= 13 && classPrice <= 15) {
-      result = min(studio - (studio % 4), students * 4);
+      result = min(studio, students * 4);
     } else if (classPrice >= 16) {
-      result = min(studio - (studio % 5), students * 5);
+      result = min(studio, students * 5);
     } else {
       result = 0; // Default case if price is below 8
     }
@@ -180,6 +180,8 @@ class _PricingScreenState extends State<PricingScreen> {
                     ),
                     Row(
                       spacing: 12,
+                      mainAxisAlignment: MainAxisAlignment.center,
+
                       children: [
                         Text('Dvorana:'),
                         SegmentedButton(
@@ -727,7 +729,7 @@ class ComparisonRow extends StatelessWidget {
             SizedBox(
               width: 36,
               child: Text(
-                '${index}',
+                '$index',
                 style: TextStyle(color: Colors.black38),
               ),
             ),
