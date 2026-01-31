@@ -8,8 +8,6 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 
 import 'firebase_options.dart';
 
-//TODO don't forget the CORS policy
-//TODO don't forget security rules
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();

@@ -195,36 +195,7 @@ class _SignUpFieldsState extends ConsumerState<SignUpFields> {
                   ),
                 ),
                 Expanded(
-                  //TODO I wish I could've figured this out for better UX, but fuck it, this is how Google does it too
-                  // child: DropdownMenu(
-                  //   dropdownMenuEntries: List.generate(12, (index) {
-                  //     return DropdownMenuEntry(
-                  //       value: index + 1,
-                  //       label: monthNames[index],
-                  //       labelWidget: Text(
-                  //         monthNames[index],
-                  //         style: TextTheme.of(context).bodySmall!.copyWith(fontSize: 16),
-                  //       ),
-                  //     );
-                  //   }),
-                  //   label: Text('Mesec', maxLines: 1),
-                  //   enableSearch: true,
-                  //   width: 1000,
-                  //   enableFilter: true,
-                  //   menuStyle: MenuStyle(
-                  //     backgroundColor: WidgetStatePropertyAll(Colors.white),
-                  //     maximumSize: WidgetStatePropertyAll(Size(200, 800)),
-                  //     minimumSize: WidgetStatePropertyAll(Size(0, 300)),
-                  //   ),
-                  //   inputDecorationTheme: InputDecorationTheme(
-                  //     enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-                  //     filled: true,
-                  //     fillColor: Colors.white,
-                  //     floatingLabelStyle: TextStyle(color: Colors.black),
-                  //     floatingLabelBehavior: FloatingLabelBehavior.auto,
-                  //     border: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-                  //   ),
-                  // ),
+                  //TODO try implementing a UX pattern that can be more easily navigated with keyboard
                   child: DropdownButtonFormField(
                     items: List.generate(12, (index) {
                       return DropdownMenuItem(value: index + 1, child: Text(monthNames[index]));
