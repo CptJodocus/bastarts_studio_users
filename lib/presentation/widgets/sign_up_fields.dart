@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bastarts_studio_users/constants/my_input_decoration.dart';
 import 'package:bastarts_studio_users/data/extra_class_provider.dart';
 import 'package:bastarts_studio_users/domain/dance_class.dart';
@@ -10,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 class SignUpFields extends ConsumerStatefulWidget {
   const SignUpFields({
@@ -24,6 +25,7 @@ class SignUpFields extends ConsumerStatefulWidget {
     required this.parentNameController,
     required this.parentSurnameController,
     required this.parentEmailController,
+    required this.birthMonthController,
   });
 
   final DanceClass danceClass;
@@ -31,6 +33,7 @@ class SignUpFields extends ConsumerStatefulWidget {
   final TextEditingController surnameController;
   final TextEditingController emailController;
   final TextEditingController birthDayController;
+  final TextEditingController birthMonthController;
   final TextEditingController birthYearController;
   final TextEditingController parentNameController;
   final TextEditingController parentSurnameController;
@@ -43,9 +46,9 @@ class SignUpFields extends ConsumerStatefulWidget {
 class _SignUpFieldsState extends ConsumerState<SignUpFields> {
   void _checkIfUserIsOfAge() {
     final day = int.tryParse(widget.birthDayController.value.text);
-    final month = birthMonth;
+    final month = int.tryParse(widget.birthMonthController.text);
     final year = int.tryParse(widget.birthYearController.value.text);
-    if (day is int && month > 0 && year is int) {
+    if (day is int && month is int && year is int) {
       setState(() {
         ofAge = DateTime(year + 18, month, day).isBefore(DateTime.now());
       });
@@ -114,12 +117,52 @@ class _SignUpFieldsState extends ConsumerState<SignUpFields> {
     }
   }
 
-  final List<String> monthNames = List.generate(12, (index) => DateFormat.MMMM('sl').format(DateTime(2000, index + 1)));
+  String? _validateBirthDay(String? value) {
+    final stringIfEmpty = _validateNotEmpty(value);
+    if (stringIfEmpty != null) {
+      return stringIfEmpty;
+    } else {
+      final day = int.tryParse(value!);
+      if (day == null) return 'Prosimo vnesite samo številke';
+      if (day > 31) return 'Prosimo vnesite veljaven dan';
+    }
+
+    return null;
+  }
+
+  String? _validateBirthMonth(String? value) {
+    final stringIfEmpty = _validateNotEmpty(value);
+    if (stringIfEmpty != null) {
+      return stringIfEmpty;
+    } else {
+      final month = int.tryParse(value!);
+      if (month == null) return 'Prosimo vnesite samo številke';
+      if (month > 12) return 'Prosimo vnesite veljaven mesec';
+    }
+
+    return null;
+  }
+
+  String? _validateBirthYear(String? value) {
+    final stringIfEmpty = _validateNotEmpty(value);
+    if (stringIfEmpty != null) {
+      return stringIfEmpty;
+    } else {
+      final year = int.tryParse(value!);
+      if (year == null) return 'Prosimo vnesite samo številke';
+      if (DateTime(year + 3).isAfter(DateTime.now()) || DateTime(year + 100).isBefore(DateTime.now())) {
+        return 'Prosimo vnesite veljavno leto';
+      }
+    }
+
+    return null;
+  }
 
   final double spacing = 12;
   static final String _compulsory = 'To polje je obvezno';
 
-  int birthMonth = 0;
+  Timer? _yearDebounceTimer;
+
   bool ofAge = true;
 
   bool? mailingListSubscribe = false;
@@ -128,6 +171,13 @@ class _SignUpFieldsState extends ConsumerState<SignUpFields> {
   Widget? termsErrorMessage;
 
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    _yearDebounceTimer?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -183,8 +233,12 @@ class _SignUpFieldsState extends ConsumerState<SignUpFields> {
                 Flexible(
                   child: TextFormField(
                     controller: widget.birthDayController,
-                    decoration: MyInputDecoration.decoration(labelText: 'Dan'),
-                    validator: (value) => _validateNotEmpty(value),
+                    decoration: MyInputDecoration.decoration(
+                      labelText: 'Dan',
+                      hintText: '31',
+                      floatingLabelBehaviour: .always,
+                    ),
+                    validator: (value) => _validateBirthDay(value),
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     autofillHints: [AutofillHints.birthdayDay],
@@ -194,62 +248,44 @@ class _SignUpFieldsState extends ConsumerState<SignUpFields> {
                   ),
                 ),
                 Expanded(
-                  //TODO try implementing a UX pattern that can be more easily navigated with keyboard
-                  child: DropdownButtonFormField(
-                    items: List.generate(12, (index) {
-                      return DropdownMenuItem(
-                        value: index + 1,
-                        child: Text(
-                          monthNames[index],
-                          style: TextTheme.of(context).bodySmall,
-                        ),
-                      );
-                    }),
-                    isExpanded: true,
-
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black54)),
-                      filled: true,
-                      fillColor: Colors.white,
-                      floatingLabelStyle: TextStyle(color: Colors.black54),
-                      floatingLabelBehavior: FloatingLabelBehavior.auto,
+                  child: TextFormField(
+                    controller: widget.birthMonthController,
+                    decoration: MyInputDecoration.decoration(
                       labelText: 'Mesec',
-                      border: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-                      errorMaxLines: 3,
-                      errorStyle: TextStyle(fontSize: 12),
+                      hintText: '12',
+                      floatingLabelBehaviour: .always,
                     ),
-                    validator: (value) {
-                      if (value == null) {
-                        return _compulsory;
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      if (value != null) birthMonth = value;
-                      _checkIfUserIsOfAge();
-                    },
+                    validator: (value) => _validateBirthMonth(value),
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.number,
+                    autofillHints: [AutofillHints.birthdayMonth],
+                    maxLength: 2,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    onChanged: (_) => _checkIfUserIsOfAge(),
                   ),
                 ),
                 Expanded(
-                  child: Focus(
-                    onFocusChange: (value) {
-                      _checkIfUserIsOfAge();
-                    },
-                    child: TextFormField(
-                      controller: widget.birthYearController,
-                      decoration: MyInputDecoration.decoration(
-                        labelText: 'Leto',
-                      ),
-                      validator: (value) => _validateNotEmpty(value),
-                      textInputAction: TextInputAction.done,
-                      keyboardType: TextInputType.number,
-                      autofillHints: [AutofillHints.birthdayYear],
-                      maxLength: 4,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      onEditingComplete: () {
-                        _checkIfUserIsOfAge();
-                      },
+                  child: TextFormField(
+                    controller: widget.birthYearController,
+                    decoration: MyInputDecoration.decoration(
+                      labelText: 'Leto',
+                      hintText: '2000',
+                      floatingLabelBehaviour: .always,
                     ),
+                    validator: (value) => _validateBirthYear(value),
+                    textInputAction: TextInputAction.done,
+                    keyboardType: TextInputType.number,
+                    autofillHints: [AutofillHints.birthdayYear],
+                    maxLength: 4,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    //Hopefully this is cheap enough that I don't care about running it on every change
+                    onChanged: (_) {
+                      if (_yearDebounceTimer?.isActive ?? false) _yearDebounceTimer?.cancel();
+                      _yearDebounceTimer = Timer(
+                        const Duration(milliseconds: 500),
+                        () => _checkIfUserIsOfAge(),
+                      );
+                    },
                   ),
                 ),
               ],
@@ -270,80 +306,80 @@ class _SignUpFieldsState extends ConsumerState<SignUpFields> {
             ),
             ofAge
                 ? TermsAndConditionsCheckbox(
-                  value: termsAgree,
-                  onChanged: (value) => _termsCheckboxOnTap(value),
-                  isError: termsError,
-                  subtitle: termsErrorMessage,
-                )
+                    value: termsAgree,
+                    onChanged: (value) => _termsCheckboxOnTap(value),
+                    isError: termsError,
+                    subtitle: termsErrorMessage,
+                  )
                 : Card(
-                  margin: EdgeInsets.zero,
-                  color: Colors.white,
-                  elevation: 8,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: spacing,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'izjava zakonitega zastopnika',
-                              style: TextTheme.of(context).bodySmall!.copyWith(fontSize: 18),
-                            ),
-                            Text(
-                              '(Izpolni starš ali zakoniti zastopnik)',
-                              style: TextTheme.of(context).bodySmall!.copyWith(fontSize: 10, color: Colors.black54),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          spacing: spacing,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                controller: widget.parentNameController,
-                                decoration: MyInputDecoration.decoration(labelText: 'Ime'),
-                                validator: (value) => _validateNotEmpty(value),
-                                keyboardType: TextInputType.name,
-                                autofillHints: [AutofillHints.givenName],
-                                textInputAction: TextInputAction.next,
+                    margin: EdgeInsets.zero,
+                    color: Colors.white,
+                    elevation: 8,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: spacing,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'izjava zakonitega zastopnika',
+                                style: TextTheme.of(context).bodySmall!.copyWith(fontSize: 18),
                               ),
-                            ),
-                            Expanded(
-                              child: TextFormField(
-                                controller: widget.parentSurnameController,
-                                decoration: MyInputDecoration.decoration(labelText: 'Priimek'),
-                                validator: (value) => _validateNotEmpty(value),
+                              Text(
+                                '(Izpolni starš ali zakoniti zastopnik)',
+                                style: TextTheme.of(context).bodySmall!.copyWith(fontSize: 10, color: Colors.black54),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            spacing: spacing,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  controller: widget.parentNameController,
+                                  decoration: MyInputDecoration.decoration(labelText: 'Ime'),
+                                  validator: (value) => _validateNotEmpty(value),
+                                  keyboardType: TextInputType.name,
+                                  autofillHints: [AutofillHints.givenName],
+                                  textInputAction: TextInputAction.next,
+                                ),
+                              ),
+                              Expanded(
+                                child: TextFormField(
+                                  controller: widget.parentSurnameController,
+                                  decoration: MyInputDecoration.decoration(labelText: 'Priimek'),
+                                  validator: (value) => _validateNotEmpty(value),
 
-                                keyboardType: TextInputType.name,
-                                autofillHints: [AutofillHints.familyName],
-                                textInputAction: TextInputAction.next,
+                                  keyboardType: TextInputType.name,
+                                  autofillHints: [AutofillHints.familyName],
+                                  textInputAction: TextInputAction.next,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        TextFormField(
-                          controller: widget.parentEmailController,
-                          decoration: MyInputDecoration.decoration(labelText: 'E-pošta'),
-                          textInputAction: TextInputAction.next,
-                          autofillHints: [AutofillHints.email],
-                          validator: (value) => _validateEmail(value),
-                          keyboardType: TextInputType.emailAddress,
-                        ),
-                        TermsAndConditionsCheckbox(
-                          value: termsAgree,
-                          onChanged: (value) => _termsCheckboxOnTap(value),
-                          isError: termsError,
-                          subtitle: termsErrorMessage,
-                        ),
-                      ],
+                            ],
+                          ),
+                          TextFormField(
+                            controller: widget.parentEmailController,
+                            decoration: MyInputDecoration.decoration(labelText: 'E-pošta'),
+                            textInputAction: TextInputAction.next,
+                            autofillHints: [AutofillHints.email],
+                            validator: (value) => _validateEmail(value),
+                            keyboardType: TextInputType.emailAddress,
+                          ),
+                          TermsAndConditionsCheckbox(
+                            value: termsAgree,
+                            onChanged: (value) => _termsCheckboxOnTap(value),
+                            isError: termsError,
+                            subtitle: termsErrorMessage,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ).animate(target: ofAge == true ? 0 : 1).scaleY(alignment: Alignment.topCenter).fadeIn(),
+                  ).animate(target: ofAge == true ? 0 : 1).scaleY(alignment: Alignment.topCenter).fadeIn(),
             SizedBox(height: 8),
             ElevatedButton(
               onPressed: () async {

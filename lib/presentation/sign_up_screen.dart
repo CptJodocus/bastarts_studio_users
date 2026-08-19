@@ -23,6 +23,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   late final TextEditingController _surnameController;
   late final TextEditingController _emailController;
   late final TextEditingController _birthDayController;
+  late final TextEditingController _birthMonthController;
   late final TextEditingController _birthYearController;
 
   late final TextEditingController _parentNameController;
@@ -35,6 +36,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     _surnameController = TextEditingController();
     _emailController = TextEditingController();
     _birthDayController = TextEditingController();
+    _birthMonthController = TextEditingController();
     _birthYearController = TextEditingController();
 
     _parentNameController = TextEditingController();
@@ -49,6 +51,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     _surnameController.dispose();
     _emailController.dispose();
     _birthDayController.dispose();
+    _birthMonthController.dispose();
     _birthYearController.dispose();
 
     _parentNameController.dispose();
@@ -119,6 +122,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         surnameController: _surnameController,
                         emailController: _emailController,
                         birthDayController: _birthDayController,
+                        birthMonthController: _birthMonthController,
                         birthYearController: _birthYearController,
                         parentNameController: _parentNameController,
                         parentSurnameController: _parentSurnameController,
