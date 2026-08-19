@@ -46,6 +46,7 @@ class MyApp extends ConsumerWidget {
           headlineMedium: TextStyle(color: Colors.white, fontSize: 24),
           bodyMedium: TextStyle(color: Colors.black, fontSize: 24),
           bodySmall: TextStyle(color: Colors.black, fontSize: 24, height: 1),
+          labelMedium: TextStyle(inherit: false),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(

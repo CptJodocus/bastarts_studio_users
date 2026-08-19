@@ -17,6 +17,8 @@ class SignUpClassInfo extends StatelessWidget {
         Text(danceClass.date, style: TextTheme.of(context).bodySmall),
         Text(danceClass.classDuration, style: TextTheme.of(context).bodySmall),
         Text(danceClass.priceString, style: TextTheme.of(context).bodySmall),
+        SizedBox(height: 16),
+        Text(danceClass.description ?? '', style: TextTheme.of(context).labelMedium),
         SizedBox(height: 32),
         ExtraRegistrationsField(danceClass),
       ],
