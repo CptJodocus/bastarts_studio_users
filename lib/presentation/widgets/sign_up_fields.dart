@@ -1,9 +1,9 @@
+import 'package:bastarts_studio_users/constants/my_input_decoration.dart';
 import 'package:bastarts_studio_users/data/extra_class_provider.dart';
 import 'package:bastarts_studio_users/domain/dance_class.dart';
 import 'package:bastarts_studio_users/presentation/functions_repository.dart';
 import 'package:bastarts_studio_users/presentation/sign_up_screen_controller.dart';
 import 'package:bastarts_studio_users/presentation/widgets/confirmation_screen.dart';
-import 'package:bastarts_studio_users/presentation/widgets/my_form_field.dart';
 import 'package:bastarts_studio_users/presentation/widgets/terms_and_conditions_checkbox.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -143,36 +143,35 @@ class _SignUpFieldsState extends ConsumerState<SignUpFields> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: MyFormField(
+                  child: TextFormField(
                     controller: widget.nameController,
-                    labelText: 'Ime',
                     validator: (value) => _validateNotEmpty(value),
+                    decoration: MyInputDecoration.decoration(labelText: 'Ime'),
                     keyboardType: TextInputType.name,
-                    autoFillHints: [AutofillHints.givenName],
+                    autofillHints: [AutofillHints.givenName],
                     textCapitalization: TextCapitalization.words,
                     textInputAction: TextInputAction.next,
                   ),
                 ),
                 Expanded(
-                  child: MyFormField(
+                  child: TextFormField(
                     controller: widget.surnameController,
-                    labelText: 'Priimek',
+                    decoration: MyInputDecoration.decoration(labelText: 'Priimek'),
                     validator: (value) => _validateNotEmpty(value),
-
                     keyboardType: TextInputType.name,
-                    autoFillHints: [AutofillHints.familyName],
+                    autofillHints: [AutofillHints.familyName],
                     textCapitalization: TextCapitalization.words,
                     textInputAction: TextInputAction.next,
                   ),
                 ),
               ],
             ),
-            MyFormField(
+            TextFormField(
               controller: widget.emailController,
-              labelText: 'E-pošta',
+              decoration: MyInputDecoration.decoration(labelText: 'E-pošta'),
               validator: (value) => _validateEmail(value),
               textInputAction: TextInputAction.next,
-              autoFillHints: [AutofillHints.email],
+              autofillHints: [AutofillHints.email],
               keyboardType: TextInputType.emailAddress,
             ),
             SizedBox(height: 8),
@@ -182,13 +181,13 @@ class _SignUpFieldsState extends ConsumerState<SignUpFields> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Flexible(
-                  child: MyFormField(
+                  child: TextFormField(
                     controller: widget.birthDayController,
-                    labelText: 'Dan',
+                    decoration: MyInputDecoration.decoration(labelText: 'Dan'),
                     validator: (value) => _validateNotEmpty(value),
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
-                    autoFillHints: [AutofillHints.birthdayDay],
+                    autofillHints: [AutofillHints.birthdayDay],
                     maxLength: 2,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     onChanged: (_) => _checkIfUserIsOfAge(),
@@ -236,13 +235,15 @@ class _SignUpFieldsState extends ConsumerState<SignUpFields> {
                     onFocusChange: (value) {
                       _checkIfUserIsOfAge();
                     },
-                    child: MyFormField(
+                    child: TextFormField(
                       controller: widget.birthYearController,
-                      labelText: 'Leto',
+                      decoration: MyInputDecoration.decoration(
+                        labelText: 'Leto',
+                      ),
                       validator: (value) => _validateNotEmpty(value),
                       textInputAction: TextInputAction.done,
                       keyboardType: TextInputType.number,
-                      autoFillHints: [AutofillHints.birthdayYear],
+                      autofillHints: [AutofillHints.birthdayYear],
                       maxLength: 4,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       onEditingComplete: () {
@@ -303,33 +304,33 @@ class _SignUpFieldsState extends ConsumerState<SignUpFields> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
-                              child: MyFormField(
+                              child: TextFormField(
                                 controller: widget.parentNameController,
-                                labelText: 'Ime',
+                                decoration: MyInputDecoration.decoration(labelText: 'Ime'),
                                 validator: (value) => _validateNotEmpty(value),
                                 keyboardType: TextInputType.name,
-                                autoFillHints: [AutofillHints.givenName],
+                                autofillHints: [AutofillHints.givenName],
                                 textInputAction: TextInputAction.next,
                               ),
                             ),
                             Expanded(
-                              child: MyFormField(
+                              child: TextFormField(
                                 controller: widget.parentSurnameController,
-                                labelText: 'Priimek',
+                                decoration: MyInputDecoration.decoration(labelText: 'Priimek'),
                                 validator: (value) => _validateNotEmpty(value),
 
                                 keyboardType: TextInputType.name,
-                                autoFillHints: [AutofillHints.familyName],
+                                autofillHints: [AutofillHints.familyName],
                                 textInputAction: TextInputAction.next,
                               ),
                             ),
                           ],
                         ),
-                        MyFormField(
+                        TextFormField(
                           controller: widget.parentEmailController,
-                          labelText: 'E-pošta',
+                          decoration: MyInputDecoration.decoration(labelText: 'E-pošta'),
                           textInputAction: TextInputAction.next,
-                          autoFillHints: [AutofillHints.email],
+                          autofillHints: [AutofillHints.email],
                           validator: (value) => _validateEmail(value),
                           keyboardType: TextInputType.emailAddress,
                         ),
