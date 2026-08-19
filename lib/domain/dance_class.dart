@@ -16,6 +16,8 @@ class DanceClass {
     this.videosSent = false,
     this.connectedClassId,
     this.packagePrice,
+    required this.requestPrepayment,
+    this.description,
   });
 
   final ClassID classId;
@@ -27,6 +29,8 @@ class DanceClass {
   final int price;
   final bool closed;
   final bool videosSent;
+  final bool requestPrepayment;
+  final String? description;
 
   //Maybe someday this will have to be a List<String?>, but not today.
   final String? connectedClassId;
@@ -35,6 +39,7 @@ class DanceClass {
   String get fullTeacherNameInline => '$teacherName $teacherSurname';
 
   String get fullTeacherNameNewLine => '$teacherName\n$teacherSurname';
+  String get nameAndDate => '$fullTeacherNameInline, $date';
 
   String get priceString => '$price€';
 
@@ -48,18 +53,34 @@ class DanceClass {
   String get inlineDetails => '$fullTeacherNameInline, $dateTime';
 
   String get dateTime => '${kDateFormat.format(startTime)}, $classDuration';
-  String get date => kDateNameFormat.format(startTime);
+  String get date => kDateFormat.format(startTime);
   String get time => kTimeFormat.format(startTime);
+
+  DanceClass copyWith({DateTime? newStartTime, String? newImageDownloadUrl}) {
+    return DanceClass(
+      classId: classId,
+      teacherName: teacherName,
+      teacherSurname: teacherSurname,
+      startTime: newStartTime ?? startTime,
+      endTime: endTime,
+      price: price,
+      imageDownloadUrl: newImageDownloadUrl ?? imageDownloadUrl,
+      requestPrepayment: requestPrepayment,
+      description: description,
+    );
+  }
 
   factory DanceClass.fromFirestore(Map<String, dynamic> map, String id) {
     return DanceClass(
       classId: id,
       teacherName: map["teacherName"],
       teacherSurname: map["teacherSurname"],
+      description: map["description"],
       startTime: (map['startTime'] as Timestamp).toDate(),
       endTime: (map['endTime'] as Timestamp).toDate(),
       imageDownloadUrl: map["imageDownloadUrl"],
       price: map["price"],
+      requestPrepayment: map["requestPrepayment"],
       closed: map["closed"],
       videosSent: map['videosSent'],
       connectedClassId: map['connectedClassId'],
@@ -69,13 +90,18 @@ class DanceClass {
 
   Map<String, dynamic> toFirestore() {
     return {
-      //Wondering if this is going to break something in the future, because I removed the "id"
       "teacherName": teacherName,
       "teacherSurname": teacherSurname,
+      "description": description,
       "startTime": Timestamp.fromDate(startTime),
       "endTime": Timestamp.fromDate(endTime),
       "imageDownloadUrl": imageDownloadUrl,
       "price": price,
+      "requestPrepayment": requestPrepayment,
+      "closed": closed,
+      "videosSent": videosSent,
+      "connectedClassId": connectedClassId,
+      "packagePrice": packagePrice,
     };
   }
 }
