@@ -1,5 +1,6 @@
 import 'package:bastarts_studio_users/constants/colors.dart';
 import 'package:bastarts_studio_users/routing/go_router.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -8,10 +9,15 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 
 import 'firebase_options.dart';
 
+Future<void> useEmulators() async {
+  FirebaseFirestore.instance.useFirestoreEmulator('127.0.0.1', 8080);
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await useEmulators();
   runApp(ProviderScope(child: const MyApp()));
 }
 
