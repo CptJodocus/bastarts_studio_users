@@ -5,7 +5,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.1+2
 
 environment:
-  sdk: ^3.7.0
+  sdk: ^3.13.0
 
 dependencies:
   flutter:
@@ -13,23 +13,23 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
 
-  cupertino_icons: ^1.0.8
+  cupertino_icons: ^1.0.9
   intl:
-  flutter_riverpod: ^3.0.0
-  riverpod_annotation: ^3.0.0
+  flutter_riverpod: ^3.4.2
+  riverpod_annotation: ^4.0.6
   grouped_list: ^6.0.0
   auto_size_text: ^3.0.0
   flutter_animate: ^4.5.2
   flutter_localizations:
     sdk: flutter
-  animations: ^2.0.11
-  cloud_firestore: ^6.1.0
-  firebase_core: ^4.3.0
-  crypto: ^3.0.6
+  animations: ^2.2.0
+  cloud_firestore: ^6.8.0
+  firebase_core: ^4.13.0
+  crypto: ^3.0.7
   email_validator: ^3.0.0
-  cloud_functions: ^6.0.4
-  url_launcher: ^6.3.1
-  go_router: ^17.0.1
+  cloud_functions: ^6.3.6
+  url_launcher: ^6.3.2
+  go_router: ^17.5.0
   flutter_sticky_header: ^0.8.0
 
 
@@ -38,11 +38,10 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^6.0.0
-  custom_lint: ^0.8.0
-  riverpod_lint: 3.0.0
-  riverpod_generator: ^3.0.0
-  build_runner: ^2.4.15
-  pubspec_checker: ^1.0.9
+  riverpod_lint: ^3.1.8
+  riverpod_generator: ^4.0.8
+  build_runner: ^2.16.0
+  pubspec_checker: ^1.3.0
 
 
 flutter:
