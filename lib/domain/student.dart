@@ -8,6 +8,7 @@ class Student {
     this.parentName,
     this.parentSurname,
     this.parentEmail,
+    this.paid,
   });
 
   final String uuid;
@@ -15,6 +16,7 @@ class Student {
   final String lastName;
   final String email;
   final bool present;
+  final bool? paid;
 
   final String? parentName;
   final String? parentSurname;
@@ -29,6 +31,7 @@ class Student {
       lastName: json["lastName"],
       email: json["email"],
       present: json["present"],
+      paid: json["paid"],
       parentName: json["parentName"],
       parentSurname: json["parenSurname"],
       parentEmail: json["parentEmail"],
@@ -42,6 +45,7 @@ class Student {
       "lastName": lastName,
       "email": email,
       "present": present,
+      "paid": paid,
       "parentName": parentName,
       "parentSurname": parentSurname,
       "parentEmail": parentEmail,
