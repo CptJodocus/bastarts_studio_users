@@ -43,12 +43,14 @@ class SignUpScreenController extends _$SignUpScreenController {
           firstName: capitalizedName,
           lastName: capitalizedSurname,
           email: email,
+          parentEmail: parentEmail,
+          parentName: parentName,
+          parentSurname: parentSurname,
         );
 
-        final packageExtraString =
-            danceClass.connectedClassId != null
-                ? '\nZa obisk obeh klasev v paketu je prispevek skupaj ${danceClass.packagePrice}€.\n\n'
-                : null;
+        final packageExtraString = danceClass.connectedClassId != null
+            ? '\nZa obisk obeh klasev v paketu je prispevek skupaj ${danceClass.packagePrice}€.\n\n'
+            : null;
 
         await repository.sendRegistrationEmail(
           danceClass,
