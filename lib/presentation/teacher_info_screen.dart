@@ -21,7 +21,7 @@ class TeacherInfoScreen extends ConsumerWidget {
               (danceClass) => Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(danceClass!.fullTeacherNameNewLine, style: TextTheme.of(context).labelLarge),
+                  Text(danceClass!.fullTeacherNameNewLine, style: TextTheme.of(context).titleLarge),
                   SizedBox(height: 8),
                   Text(danceClass.date, style: TextTheme.of(context).bodySmall),
                   Text(danceClass.classDuration, style: TextTheme.of(context).bodySmall),

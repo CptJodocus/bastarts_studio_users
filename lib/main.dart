@@ -41,8 +41,8 @@ class MyApp extends ConsumerWidget {
         fontFamily: 'BebasNeue',
         // primaryColor: Colors.white,
         textTheme: TextTheme(
-          labelMedium: TextStyle(color: Colors.white, fontSize: 48),
-          labelLarge: TextStyle(color: Colors.black, fontSize: 48, height: 1),
+          titleMedium: TextStyle(color: Colors.white, fontSize: 48),
+          titleLarge: TextStyle(color: Colors.black, fontSize: 48, height: 1),
           headlineMedium: TextStyle(color: Colors.white, fontSize: 24),
           bodyMedium: TextStyle(color: Colors.black, fontSize: 24),
           bodySmall: TextStyle(color: Colors.black, fontSize: 24, height: 1),

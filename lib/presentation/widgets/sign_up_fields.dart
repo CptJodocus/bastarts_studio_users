@@ -198,7 +198,13 @@ class _SignUpFieldsState extends ConsumerState<SignUpFields> {
                   //TODO try implementing a UX pattern that can be more easily navigated with keyboard
                   child: DropdownButtonFormField(
                     items: List.generate(12, (index) {
-                      return DropdownMenuItem(value: index + 1, child: Text(monthNames[index]));
+                      return DropdownMenuItem(
+                        value: index + 1,
+                        child: Text(
+                          monthNames[index],
+                          style: TextTheme.of(context).bodySmall,
+                        ),
+                      );
                     }),
                     isExpanded: true,
 

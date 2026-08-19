@@ -150,7 +150,7 @@ class _PricingScreenState extends State<PricingScreen> {
                   child: Center(
                     child: Text(
                       'Studio Cenik',
-                      style: TextTheme.of(context).labelMedium,
+                      style: TextTheme.of(context).titleMedium,
                     ),
                   ),
                 ),
@@ -287,7 +287,7 @@ class _PricingScreenState extends State<PricingScreen> {
                           children: [
                             Text(
                               'Dvorana',
-                              style: TextTheme.of(context).labelLarge,
+                              style: TextTheme.of(context).titleLarge,
                             ),
                             IconButton(
                               onPressed: () {
@@ -405,7 +405,7 @@ class _PricingScreenState extends State<PricingScreen> {
                               children: [
                                 Text(
                                   'Snemanje',
-                                  style: TextTheme.of(context).labelLarge,
+                                  style: TextTheme.of(context).titleLarge,
                                 ),
                                 IconButton(
                                   onPressed: () {
@@ -522,7 +522,7 @@ class _PricingScreenState extends State<PricingScreen> {
                           children: [
                             Text(
                               'Administracija',
-                              style: TextTheme.of(context).labelLarge,
+                              style: TextTheme.of(context).titleLarge,
                             ),
                             IconButton(
                               onPressed: () {
@@ -592,7 +592,7 @@ class _PricingScreenState extends State<PricingScreen> {
                       children: [
                         Text(
                           'Skupaj',
-                          style: TextTheme.of(context).labelLarge,
+                          style: TextTheme.of(context).titleLarge,
                         ),
 
                         Divider(color: Colors.black38),

@@ -79,19 +79,19 @@ class _ClassCardContentsState extends State<ClassCardContents> {
                 child: ResponsiveTwoColumnLayout(
                   startContent: AutoSizeText(
                     widget.danceClass.fullTeacherNameInline,
-                    style: TextTheme.of(context).labelMedium!.copyWith(height: 0.8),
+                    style: TextTheme.of(context).titleMedium!.copyWith(height: 0.8),
                     group: autoSizeGroup,
                     maxLines: 1,
                   ),
                   endContent: AutoSizeText(
                     widget.danceClass.classDuration,
-                    style: TextTheme.of(context).labelMedium!.copyWith(height: 0.8),
+                    style: TextTheme.of(context).titleMedium!.copyWith(height: 0.8),
                     group: autoSizeGroup,
                     maxLines: 1,
                   ),
                   columnContent: AutoSizeText(
                     widget.danceClass.columnDetails,
-                    style: TextTheme.of(context).labelMedium,
+                    style: TextTheme.of(context).titleMedium,
                   ),
                   spacing: 32,
                 ),
