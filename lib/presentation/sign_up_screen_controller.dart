@@ -49,18 +49,30 @@ class SignUpScreenController extends _$SignUpScreenController {
         );
 
         final packageExtraString = danceClass.connectedClassId != null
-            ? '\nZa obisk obeh klasev v paketu je prispevek skupaj ${danceClass.packagePrice}€.\n\n'
+            ? '\nZa obisk obeh tečajev v paketu je prispevek skupaj ${danceClass.packagePrice}€.\n\n'
             : null;
 
-        await repository.sendRegistrationEmail(
-          danceClass,
-          capitalizedName,
-          email,
-          parentEmail,
-          packageExtraString,
-        );
-        state = AsyncData(null);
-        return true;
+        if (danceClass.requestPrepayment) {
+          await repository.sendPaymentRequestEmail(
+            danceClass: danceClass,
+            firstName: firstName,
+            email: email,
+            parentEmail: parentEmail,
+            extra: packageExtraString,
+          );
+          state = AsyncData(null);
+          return true;
+        } else {
+          await repository.sendRegistrationEmail(
+            danceClass: danceClass,
+            firstName: capitalizedName,
+            email: email,
+            parentEmail: parentEmail,
+            extra: packageExtraString,
+          );
+          state = AsyncData(null);
+          return true;
+        }
       }
     } catch (error, stackTrace) {
       state = AsyncError(error, stackTrace);

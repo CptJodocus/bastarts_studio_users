@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bastarts_studio_users/domain/dance_class.dart';
 import 'package:bastarts_studio_users/domain/student.dart';
+import 'package:bastarts_studio_users/utils/string_capitalization.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -68,18 +69,19 @@ class DanceClassRepository {
       parentName: parentName,
       parentSurname: parentSurname,
       parentEmail: parentEmail,
+      paid: false,
     );
 
     await _studentRef(danceClassId, studentId).set(student);
   }
 
-  Future<void> sendRegistrationEmail(
-    DanceClass danceClass,
-    String firstName,
-    String email,
+  Future<void> sendRegistrationEmail({
+    required DanceClass danceClass,
+    required String firstName,
+    required String email,
     String? parentEmail,
     String? extra,
-  ) async {
+  }) async {
     final mailRef = _firestore.collection('mail');
 
     Map<String, dynamic> emailMap = {
@@ -88,9 +90,41 @@ class DanceClassRepository {
       'template': {
         'name': 'register',
         'data': {
-          'name': firstName,
+          'name': firstName.capitalize(),
           'teacherName': danceClass.fullTeacherNameInline,
           'classDetails': danceClass.inlineDetails,
+          'price': danceClass.priceString,
+          'extra': extra,
+        },
+      },
+    };
+
+    if (parentEmail != null) {
+      emailMap.addAll({'cc': parentEmail});
+    }
+
+    await mailRef.add(emailMap);
+  }
+
+  Future<void> sendPaymentRequestEmail({
+    required DanceClass danceClass,
+    required String firstName,
+    required String email,
+    String? parentEmail,
+    String? extra,
+  }) async {
+    final mailRef = _firestore.collection('mail');
+
+    Map<String, dynamic> emailMap = {
+      'to': email,
+
+      'template': {
+        'name': 'requestPrepayment',
+        'data': {
+          'name': firstName.capitalize(),
+          'teacherName': danceClass.fullTeacherNameInline,
+          'classDetails': danceClass.inlineDetails,
+          'purpose': 'Plačilo tečaj - ${danceClass.date}',
           'price': danceClass.priceString,
           'extra': extra,
         },
