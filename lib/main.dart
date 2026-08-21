@@ -17,7 +17,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await useEmulators();
+  // await useEmulators();
   runApp(ProviderScope(child: const MyApp()));
 }
 
