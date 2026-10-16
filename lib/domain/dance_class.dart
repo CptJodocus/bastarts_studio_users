@@ -1,40 +1,38 @@
 import 'package:bastarts_studio_users/utils/date_time_format.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-typedef ClassID = String;
+part 'dance_class.freezed.dart';
+part 'dance_class.g.dart';
 
-class DanceClass {
-  const DanceClass({
-    required this.classId,
-    required this.teacherName,
-    required this.teacherSurname,
-    required this.startTime,
-    required this.endTime,
-    this.imageDownloadUrl,
-    this.price = 12,
-    this.closed = false,
-    this.videosSent = false,
-    this.connectedClassId,
-    this.packagePrice,
-    required this.requestPrepayment,
-    this.description,
-  });
+@freezed
+abstract class DanceClass with _$DanceClass {
+  const factory DanceClass({
+    @Default('') String classId,
+    required String teacherName,
+    required String teacherSurname,
+    @DateTimeToTimestampConverter() required DateTime startTime,
+    @DateTimeToTimestampConverter() required DateTime endTime,
+    String? imageDownloadUrl,
+    @Default(15) int price,
+    @Default(false) bool closed,
+    @Default(false) bool videosSent,
+    required bool requestPrepayment,
+    String? description,
 
-  final ClassID classId;
-  final String teacherName;
-  final String teacherSurname;
-  final DateTime startTime;
-  final DateTime endTime;
-  final String? imageDownloadUrl;
-  final int price;
-  final bool closed;
-  final bool videosSent;
-  final bool requestPrepayment;
-  final String? description;
+    //Emails
+    List<Map<String, dynamic>>? pendingPaymentEmail,
+    List<Map<String, dynamic>>? confirmPaymentEmail,
+    List<Map<String, dynamic>>? registrationEmail,
 
-  //Maybe someday this will have to be a List<String?>, but not today.
-  final String? connectedClassId;
-  final int? packagePrice;
+    //Maybe someday this will have to be a List<String?>, but not today.
+    String? connectedClassId,
+    int? packagePrice,
+  }) = _DanceClass;
+
+  const DanceClass._();
+
+  factory DanceClass.fromJson(Map<String, dynamic> json) => _$DanceClassFromJson(json);
 
   String get fullTeacherNameInline => '$teacherName $teacherSurname';
 
@@ -55,53 +53,22 @@ class DanceClass {
   String get dateTime => '${kDateFormat.format(startTime)}, $classDuration';
   String get date => kDateFormat.format(startTime);
   String get time => kTimeFormat.format(startTime);
+}
 
-  DanceClass copyWith({DateTime? newStartTime, String? newImageDownloadUrl}) {
-    return DanceClass(
-      classId: classId,
-      teacherName: teacherName,
-      teacherSurname: teacherSurname,
-      startTime: newStartTime ?? startTime,
-      endTime: endTime,
-      price: price,
-      imageDownloadUrl: newImageDownloadUrl ?? imageDownloadUrl,
-      requestPrepayment: requestPrepayment,
-      description: description,
-    );
-  }
+class DateTimeToTimestampConverter implements JsonConverter<DateTime, String> {
+  const DateTimeToTimestampConverter();
 
-  factory DanceClass.fromFirestore(Map<String, dynamic> map, String id) {
-    return DanceClass(
-      classId: id,
-      teacherName: map["teacherName"],
-      teacherSurname: map["teacherSurname"],
-      description: map["description"],
-      startTime: (map['startTime'] as Timestamp).toDate(),
-      endTime: (map['endTime'] as Timestamp).toDate(),
-      imageDownloadUrl: map["imageDownloadUrl"],
-      price: map["price"],
-      requestPrepayment: map["requestPrepayment"],
-      closed: map["closed"],
-      videosSent: map['videosSent'],
-      connectedClassId: map['connectedClassId'],
-      packagePrice: map['packagePrice'],
-    );
-  }
+  //Flexible read to support legacy Firebase entries
+  @override
+  DateTime fromJson(Object json) => switch (json) {
+    Timestamp t => t.toDate(),
+    String s => DateTime.parse(s),
 
-  Map<String, dynamic> toFirestore() {
-    return {
-      "teacherName": teacherName,
-      "teacherSurname": teacherSurname,
-      "description": description,
-      "startTime": Timestamp.fromDate(startTime),
-      "endTime": Timestamp.fromDate(endTime),
-      "imageDownloadUrl": imageDownloadUrl,
-      "price": price,
-      "requestPrepayment": requestPrepayment,
-      "closed": closed,
-      "videosSent": videosSent,
-      "connectedClassId": connectedClassId,
-      "packagePrice": packagePrice,
-    };
-  }
+    _ => throw FormatException('Unsupported date value: $json'),
+  };
+
+  //Always write to string to support both Firebase and Sembast
+  //(This also adds timezone ambiguity, so it can always be assumed Slovenian, regardless of device location)
+  @override
+  String toJson(DateTime object) => object.toIso8601String();
 }

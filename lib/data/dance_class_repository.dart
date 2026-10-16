@@ -21,23 +21,23 @@ class DanceClassRepository {
     return classes.snapshots().map((snapshot) => snapshot.docs.map((document) => document.data()).toList());
   }
 
-  Stream<DanceClass?> watchDanceClass(ClassID id) {
+  Stream<DanceClass?> watchDanceClass(String id) {
     final ref = _danceClassRef(id);
     return ref.snapshots().map((event) => event.data());
   }
 
-  Future<DanceClass?> fetchDanceClass(ClassID id) async {
+  Future<DanceClass?> fetchDanceClass(String id) async {
     final ref = _danceClassRef(id);
     final snapshot = await ref.get();
     return snapshot.data();
   }
 
-  Stream<int> watchDanceClassRegistrations(ClassID id) {
+  Stream<int> watchDanceClassRegistrations(String id) {
     final ref = _studentsCollectionRef(id);
     return ref.snapshots().map((event) => event.docs.map((e) => e.data()).toList().length);
   }
 
-  Future<bool> alreadyRegistered(ClassID classId, String email) {
+  Future<bool> alreadyRegistered(String classId, String email) {
     final uuid = emailToUuid(email);
 
     final studentRef = _studentRef(classId, uuid);
@@ -141,25 +141,25 @@ class DanceClassRepository {
   CollectionReference<DanceClass> _danceCollectionRef() => _firestore
       .collection('classes')
       .withConverter(
-        fromFirestore: (snapshot, options) => DanceClass.fromFirestore(snapshot.data()!, snapshot.id),
-        toFirestore: (value, options) => value.toFirestore(),
+        fromFirestore: (snapshot, options) => DanceClass.fromJson(snapshot.data()!),
+        toFirestore: (value, options) => value.toJson(),
       );
 
-  CollectionReference<Student> _studentsCollectionRef(ClassID id) => _firestore
+  CollectionReference<Student> _studentsCollectionRef(String id) => _firestore
       .collection('classes/$id/students')
       .withConverter(
         fromFirestore: (snapshot, options) => Student.fromJson(snapshot.data()!),
         toFirestore: (value, options) => value.toJson(),
       );
 
-  DocumentReference<DanceClass> _danceClassRef(ClassID id) => _firestore
+  DocumentReference<DanceClass> _danceClassRef(String id) => _firestore
       .doc('classes/$id')
       .withConverter(
-        fromFirestore: (snapshot, options) => DanceClass.fromFirestore(snapshot.data()!, snapshot.id),
-        toFirestore: (value, options) => value.toFirestore(),
+        fromFirestore: (snapshot, options) => DanceClass.fromJson(snapshot.data()!),
+        toFirestore: (value, options) => value.toJson(),
       );
 
-  DocumentReference<Student> _studentRef(ClassID id, String uuid) => _firestore
+  DocumentReference<Student> _studentRef(String id, String uuid) => _firestore
       .doc('classes/$id/students/$uuid')
       .withConverter(
         fromFirestore: (snapshot, options) => Student.fromJson(snapshot.data()!),
@@ -179,19 +179,19 @@ Stream<List<DanceClass>> danceClassesStream(Ref ref) {
 }
 
 @riverpod
-Stream<DanceClass?> danceClassStream(Ref ref, ClassID id) {
+Stream<DanceClass?> danceClassStream(Ref ref, String id) {
   final repository = ref.watch(danceClassRepositoryProvider);
   return repository.watchDanceClass(id);
 }
 
 @riverpod
-Future<DanceClass?> danceClassFuture(Ref ref, ClassID id) {
+Future<DanceClass?> danceClassFuture(Ref ref, String id) {
   final repository = ref.watch(danceClassRepositoryProvider);
   return repository.fetchDanceClass(id);
 }
 
 @riverpod
-Stream<int> studentStream(Ref ref, ClassID id) {
+Stream<int> studentStream(Ref ref, String id) {
   final repository = ref.watch(danceClassRepositoryProvider);
   return repository.watchDanceClassRegistrations(id);
 }
