@@ -35,9 +35,9 @@ class DanceClassRepository {
     return snapshot.data();
   }
 
-  Stream<int> watchDanceClassRegistrations(String id) {
+  Stream<List<Student>> watchDanceClassRegistrations(String id) {
     final ref = _studentsCollectionRef(id);
-    return ref.snapshots().map((event) => event.docs.map((e) => e.data()).toList().length);
+    return ref.snapshots().map((event) => event.docs.map((e) => e.data()).toList());
   }
 
   Future<bool> alreadyRegistered(String classId, String email) {
@@ -227,7 +227,7 @@ Future<DanceClass?> danceClassFuture(Ref ref, String id) {
 }
 
 @riverpod
-Stream<int> studentStream(Ref ref, String id) {
+Stream<List<Student>> studentStream(Ref ref, String id) {
   final repository = ref.watch(danceClassRepositoryProvider);
   return repository.watchDanceClassRegistrations(id);
 }

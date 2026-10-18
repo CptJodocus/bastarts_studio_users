@@ -17,31 +17,41 @@ class TeacherInfoScreen extends ConsumerWidget {
       body: Padding(
         padding: EdgeInsetsGeometry.all(32),
         child: danceClassValue.when(
-          data:
-              (danceClass) => Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(danceClass!.fullTeacherNameNewLine, style: TextTheme.of(context).titleLarge),
-                  SizedBox(height: 8),
-                  Text(danceClass.date, style: TextTheme.of(context).bodySmall),
-                  Text(danceClass.classDuration, style: TextTheme.of(context).bodySmall),
-                  Text(danceClass.priceString, style: TextTheme.of(context).bodySmall),
-                  SizedBox(height: 32),
+          data: (danceClass) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(danceClass!.fullTeacherNameNewLine, style: TextTheme.of(context).titleLarge),
+              SizedBox(height: 8),
+              Text(danceClass.date, style: TextTheme.of(context).bodySmall),
+              Text(danceClass.classDuration, style: TextTheme.of(context).bodySmall),
+              Text(danceClass.priceString, style: TextTheme.of(context).bodySmall),
+              SizedBox(height: 32),
 
-                  studentsValue.when(
-                    data: (data) => Text('$data prijavljenih tečajnikov'),
-                    error: (err, stack) {
-                      debugPrint(stack.toString());
-                      return Text('Prišlo je do napake');
-                    },
-                    loading: () => CupertinoActivityIndicator(),
-                  ),
-                ],
+              studentsValue.when(
+                data: (data) {
+                  final registeredLength = data.length;
+                  final paidLength = data.where(
+                    (element) => element.paid == true,
+                  );
+
+                  final String maybePayers = danceClass.requestPrepayment ? '$paidLength plačanih / ' : '';
+
+                  return Text(
+                    '$maybePayers'
+                    '$registeredLength prijavljenih tečajnikov',
+                  );
+                },
+                error: (err, stack) {
+                  debugPrint(stack.toString());
+                  return Text('Prišlo je do napake');
+                },
+                loading: () => CupertinoActivityIndicator(),
               ),
-          error:
-              (err, stack) => Center(
-                child: Text('Prišlo je do napake'),
-              ),
+            ],
+          ),
+          error: (err, stack) => Center(
+            child: Text('Prišlo je do napake'),
+          ),
           loading: () => CupertinoActivityIndicator(),
         ),
       ),
