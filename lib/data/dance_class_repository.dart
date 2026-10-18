@@ -5,7 +5,10 @@ import 'package:bastarts_studio_users/domain/student.dart';
 import 'package:bastarts_studio_users/utils/string_capitalization.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_quill/quill_delta.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
 
 part 'dance_class_repository.g.dart';
 
@@ -75,27 +78,64 @@ class DanceClassRepository {
     await _studentRef(danceClassId, studentId).set(student);
   }
 
+  void _replaceHandlebar(Document doc, String token, String replacement) {
+    final offsets = doc.search(token, caseSensitive: true);
+
+    for (var offset in offsets.reversed) {
+      final style = doc.collectStyle(offset, token.length);
+      final attributes = {
+        for (final a in style.values)
+          if (a.scope == AttributeScope.inline) a.key: a.value,
+      };
+      doc.compose(
+        Delta()
+          ..retain(offset)
+          ..delete(token.length)
+          ..insert(replacement, attributes),
+        .local,
+      );
+    }
+  }
+
+  String _docToProcessedHtml(Document doc, {required DanceClass danceClass, required String firstName}) {
+    final replacements = {
+      '{{name}}': firstName.capitalize(),
+      '{{classDetails}}': danceClass.inlineDetails,
+      '{{price}}': danceClass.priceString,
+      '{{packageInfo}}': danceClass.connectedClassId != null
+          ? 'Za obisk obeh tečajev v paketu je prispevek skupaj ${danceClass.packagePrice}€.'
+          : '',
+      '{{purpose}}': 'Plačilo tečaj - ${danceClass.date}',
+    };
+
+    replacements.forEach(
+      (key, value) => _replaceHandlebar(doc, key, value),
+    );
+    final converter = QuillDeltaToHtmlConverter(doc.toDelta().toJson(), .forEmail());
+    final html = converter.convert();
+    return html;
+  }
+
   Future<void> sendRegistrationEmail({
     required DanceClass danceClass,
     required String firstName,
     required String email,
     String? parentEmail,
-    String? extra,
   }) async {
     final mailRef = _firestore.collection('mail');
+
+    assert(danceClass.registrationEmail != null);
+
+    Document doc = Document.fromJson(danceClass.registrationEmail!);
+
+    final html = _docToProcessedHtml(doc, danceClass: danceClass, firstName: firstName);
 
     Map<String, dynamic> emailMap = {
       'to': email,
 
-      'template': {
-        'name': 'register',
-        'data': {
-          'name': firstName.capitalize(),
-          'teacherName': danceClass.fullTeacherNameInline,
-          'classDetails': danceClass.inlineDetails,
-          'price': danceClass.priceString,
-          'extra': extra,
-        },
+      'message': {
+        'subject': 'Prijava na BastArts Studio Open Class - ${danceClass.fullTeacherNameInline}',
+        'html': html,
       },
     };
 
@@ -111,23 +151,19 @@ class DanceClassRepository {
     required String firstName,
     required String email,
     String? parentEmail,
-    String? extra,
   }) async {
     final mailRef = _firestore.collection('mail');
+
+    Document doc = Document.fromJson(danceClass.pendingPaymentEmail!);
+
+    final html = _docToProcessedHtml(doc, danceClass: danceClass, firstName: firstName);
 
     Map<String, dynamic> emailMap = {
       'to': email,
 
-      'template': {
-        'name': 'requestPrepayment',
-        'data': {
-          'name': firstName.capitalize(),
-          'teacherName': danceClass.fullTeacherNameInline,
-          'classDetails': danceClass.inlineDetails,
-          'purpose': 'Plačilo tečaj - ${danceClass.date}',
-          'price': danceClass.priceString,
-          'extra': extra,
-        },
+      'message': {
+        'subject': 'Prijava na BastArts Studio Open Class - ${danceClass.fullTeacherNameInline}',
+        'html': html,
       },
     };
 

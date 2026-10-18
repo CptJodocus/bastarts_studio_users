@@ -48,17 +48,12 @@ class SignUpScreenController extends _$SignUpScreenController {
           parentSurname: parentSurname,
         );
 
-        final packageExtraString = danceClass.connectedClassId != null
-            ? '\nZa obisk obeh tečajev v paketu je prispevek skupaj ${danceClass.packagePrice}€.\n\n'
-            : null;
-
         if (danceClass.requestPrepayment) {
           await repository.sendPaymentRequestEmail(
             danceClass: danceClass,
             firstName: firstName,
             email: email,
             parentEmail: parentEmail,
-            extra: packageExtraString,
           );
           state = AsyncData(null);
           return true;
@@ -68,7 +63,6 @@ class SignUpScreenController extends _$SignUpScreenController {
             firstName: capitalizedName,
             email: email,
             parentEmail: parentEmail,
-            extra: packageExtraString,
           );
           state = AsyncData(null);
           return true;
