@@ -32,7 +32,7 @@ class TeacherInfoScreen extends ConsumerWidget {
                   final registeredLength = data.length;
                   final paidLength = data.where(
                     (element) => element.paid == true,
-                  );
+                  ).length;
 
                   final String maybePayers = danceClass.requestPrepayment ? '$paidLength plačanih / ' : '';
 
